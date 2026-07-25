@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { sanitizeBoardSnapshot } from "./sanitize-board";
+import { sanitizeBoardCollection, sanitizeBoardSnapshot } from "./sanitize-board";
 import { firebasePaths } from "./paths";
 
 describe("쿠지병동 Firebase 안전 경계", () => {
   it("고정된 쿠지병동 공개 스냅샷만 사용한다", () => {
-    expect(firebasePaths.boardSnapshot).toBe("branches/kuji-byeongdong/boards/current");
+    expect(firebasePaths.boardSnapshot).toBe("web/kuji-byeongdong/publicBoards");
     expect(Object.values(firebasePaths).join(" ")).not.toContain("ownerApi");
     expect(Object.values(firebasePaths).join(" ")).not.toContain("serverData");
     expect(firebasePaths.webRoot).toBe("web/kuji-byeongdong");
@@ -28,5 +28,21 @@ describe("쿠지병동 Firebase 안전 경계", () => {
     expect(result).not.toHaveProperty("history");
     expect(result).not.toHaveProperty("coinLogs");
     expect(result).not.toHaveProperty("account");
+  });
+
+  it("전체판 실시간 스냅샷도 개수 제한과 재정제를 적용한다", () => {
+    const result = sanitizeBoardCollection({
+      currentIndex: 1,
+      featuredIndex: 0,
+      sourceUpdatedAt: "2026-07-25T00:00:00.000Z",
+      boards: [
+        { id: "one", boardName: "첫 판", totalCards: 10, openedCount: 3, customerResults: [{ nickname: "환자", randomGoodsCount: 2, totalDraws: 3, upperPrizes: [{ name: "A상", count: 1 }], account: "제외" }] },
+        { id: "two", boardName: "둘째 판", totalCards: 20, openedCount: 5 },
+      ],
+    });
+    expect(result.boards).toHaveLength(2);
+    expect(result.currentIndex).toBe(1);
+    expect(result.boards[0].customerResults?.[0]).toMatchObject({ nickname: "환자", randomGoodsCount: 2 });
+    expect(result.boards[0].customerResults?.[0]).not.toHaveProperty("account");
   });
 });

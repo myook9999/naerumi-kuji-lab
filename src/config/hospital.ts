@@ -3,7 +3,7 @@ export const hospital = {
   storeId: "KujiHospital_Store_01",
   name: "쿠지병동",
   ownerName: "쿠지병동 사장님",
-  boardSnapshotPath: "branches/kuji-byeongdong/boards/current",
+  boardSnapshotPath: "web/kuji-byeongdong/publicBoards",
   webRootPath: "web/kuji-byeongdong",
   colors: {
     primary: "#C95F5C",

@@ -2,11 +2,11 @@
 /* eslint-disable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInAnonymously, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { toast } from "sonner";
 import { MAX_TREATMENT_STAGE } from "@/config/hospital";
 import previewBoardsData from "@/data/kuji-byeongdong-boards-preview.json";
-import { getFirebaseClient, isFirebaseMode, subscribeHospitalBoard } from "@/lib/firebase/client";
+import { getFirebaseClient, isFirebaseMode, isLiveBoardMode, subscribeHospitalBoards } from "@/lib/firebase/client";
 import { resolveTreatmentOutcome } from "@/lib/treatment";
 import { defaultTreatmentSettings, sanitizeTreatmentSettings, validateTreatmentRates } from "@/lib/treatment-settings";
 import type { CustomerWinning, HospitalMember, HospitalSession, PublicBoardCollectionPreview, PublicBoardSnapshot, ShippingAddress, ShippingStatus, TreatmentLog, TreatmentRate, TreatmentResult, TreatmentSettings } from "@/types/hospital";
@@ -99,6 +99,7 @@ async function apiRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
 
 export function HospitalProvider({ children }: { children: React.ReactNode }) {
   const firebaseMode = isFirebaseMode();
+  const liveBoardMode = isLiveBoardMode();
   const [session, setSession] = useState<HospitalSession | null>(null);
   const [ready, setReady] = useState(false);
   const [board, setBoard] = useState(demoBoard);
@@ -180,13 +181,28 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
   }, [firebaseMode, members, boardVisible, session, demoCredentials, treatmentSettings, treatmentLogs, winnings, shippingAddresses]);
 
   useEffect(() => {
-    if (!firebaseMode || !session || session.status !== "approved") return;
+    if (!liveBoardMode || !session || session.status !== "approved") return;
     setBoardConnection("connecting");
-    return subscribeHospitalBoard(
-      (next) => { setBoard(next); setBoards((current) => current.map((item) => item.id === demoBoard.id ? next : item)); setBoardConnection("live"); setBoardError(""); },
-      (message) => { setBoardConnection("error"); setBoardError(message); },
-    );
-  }, [firebaseMode, session?.uid, session?.status]);
+    let unsubscribe: () => void = () => {};
+    let cancelled = false;
+    const start = async () => {
+      const firebase = getFirebaseClient();
+      if (!firebase) throw new Error("Firebase 공개판 설정이 없습니다.");
+      if (!firebase.auth.currentUser) await signInAnonymously(firebase.auth);
+      if (cancelled) return;
+      unsubscribe = subscribeHospitalBoards(
+        (next) => {
+          setBoards(next.boards);
+          setBoard((current) => next.boards.find((item) => item.id === current.id) ?? next.boards[next.featuredIndex] ?? next.boards[0]);
+          setBoardConnection("live");
+          setBoardError("");
+        },
+        (message) => { setBoardConnection("error"); setBoardError(message); },
+      );
+    };
+    start().catch(() => { setBoardConnection("error"); setBoardError("쿠지병동 공개판 실시간 연결을 확인해 주세요."); });
+    return () => { cancelled = true; unsubscribe(); };
+  }, [liveBoardMode, session?.uid, session?.status]);
 
   const login = useCallback(async (loginId: string, password: string) => {
     const normalizedId = loginId.trim().toLowerCase();

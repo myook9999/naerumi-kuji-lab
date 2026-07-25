@@ -20,9 +20,9 @@ corepack pnpm dev
 - 승인 환자: `patient / demo1234`
 - 승인 대기: `pending / demo1234`
 
-기본값은 `NEXT_PUBLIC_DATA_MODE=mock`이므로 Firebase에 접속하거나 데이터를 변경하지 않습니다. 쿠지판에는 2026년 7월 3일 기존 프로그램이 실제 Firebase와 동기화해 둔 로컬 캐시에서 개인정보·당첨 이력·이미지를 제거한 미리보기가 표시됩니다.
+기본 회원·배송 시연은 `NEXT_PUBLIC_DATA_MODE=mock`을 사용합니다. `NEXT_PUBLIC_BOARD_MODE=firebase`를 함께 설정하면 회원 시연 데이터는 유지하면서 쿠지병동 프로그램이 발행한 공개 쿠지판만 Firebase 리스너 1개로 실시간 구독합니다.
 
-현재 미리보기 판은 `600장`, 총 500장, 오픈 34장, 판매가 18,000원입니다. 실제 Firebase의 안전한 공개 스냅샷 경로는 아직 운영 데이터가 준비되지 않았으므로 실시간 연결 완료로 표시하지 않습니다.
+프로그램 1.0.6 이상은 변경 내용을 5초간 모은 뒤 `web/kuji-byeongdong/publicBoards`에 정제된 전체판 스냅샷을 발행합니다. 원본·ownerApi·다른 지점 경로는 사이트에서 조회하지 않습니다.
 
 ## 검증
 
