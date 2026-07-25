@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Activity, ClipboardList, HeartPulse, LayoutDashboard, LogOut, Menu, MonitorDot, ShieldCheck, Users, X } from "lucide-react";
+import { Activity, ClipboardList, HeartPulse, LayoutDashboard, LogOut, Menu, MonitorDot, ShieldCheck, Users, WalletCards, X } from "lucide-react";
 import { useState } from "react";
 import { assets } from "@/config/brand";
 import { useHospital } from "@/components/hospital-provider";
@@ -11,9 +11,10 @@ import { Card } from "@/components/ui";
 
 const nav = [
   ["/admin/dashboard", "병동 대시보드", LayoutDashboard],
+  ["/admin/settlements", "매출·정산 확인", WalletCards],
   ["/admin/kuji-boards", "쿠지판 모니터", MonitorDot],
   ["/admin/members", "환자 승인·포인트", Users],
-  ["/admin/treatment", "환자 치료 현황", HeartPulse],
+  ["/admin/treatment", "강화 치료 관리", HeartPulse],
 ] as const;
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
@@ -37,7 +38,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <small className="copyright">© 2026 쿠지병동</small>
     </aside>
     <div className="admin-main">
-      <header className="topbar hospital-topbar"><button className="mobile-menu" onClick={() => setMobile(true)} aria-label="메뉴 열기"><Menu/></button><span className="single-store"><ClipboardList/> 쿠지병동 단일 지점</span><span className={`sync-status ${hospital.boardConnection === "error" ? "error" : ""}`}><i/>{hospital.boardConnection === "live" ? "Firebase 실시간 연동" : hospital.boardConnection === "demo" ? "시연 모드" : "연동 확인 중"}</span><div className="top-spacer"/><Link className="patient-preview" href="/patient">환자 화면 보기</Link><button className="owner-profile" onClick={logout}><span>쿠</span><div><b>쿠지병동 사장님</b><small>관리자 · 로그아웃</small></div><LogOut/></button></header>
+      <header className="topbar hospital-topbar"><button className="mobile-menu" onClick={() => setMobile(true)} aria-label="메뉴 열기"><Menu/></button><span className="single-store"><ClipboardList/> 쿠지병동 단일 지점</span><span className={`sync-status ${hospital.boardConnection === "error" ? "error" : ""}`}><i/>{hospital.boardConnection === "live" ? "Firebase 실시간 연동" : hospital.boardConnection === "preview" ? "실제 캐시 미리보기" : hospital.boardConnection === "demo" ? "시연 모드" : "연동 확인 중"}</span><div className="top-spacer"/><Link className="patient-preview" href="/patient">환자 화면 보기</Link><button className="owner-profile" onClick={logout}><span>쿠</span><div><b>쿠지병동 사장님</b><small>관리자 · 로그아웃</small></div><LogOut/></button></header>
       <main className="admin-content">{children}</main>
     </div>
   </div>;

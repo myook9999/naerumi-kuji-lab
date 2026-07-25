@@ -39,11 +39,33 @@ export interface PublicBoardSnapshot {
 }
 
 export interface TreatmentResult {
+  outcome: "success" | "failed" | "destroyed";
   success: boolean;
+  destroyed: boolean;
   beforeStage: number;
   afterStage: number;
   cost: number;
   points: number;
   probability: number;
+  destroyProbability: number;
   createdAt: string;
+}
+
+export interface TreatmentRate {
+  stage: number;
+  probability: number;
+  destroyProbability: number;
+}
+
+export interface TreatmentSettings {
+  rates: TreatmentRate[];
+  notice: string;
+  updatedAt: string;
+}
+
+export interface TreatmentLog extends TreatmentResult {
+  id: string;
+  uid: string;
+  loginId: string;
+  name: string;
 }

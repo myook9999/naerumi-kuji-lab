@@ -49,3 +49,36 @@ test("신규 고객은 직접 정한 비밀번호로 승인 대기 로그인한�
   await page.getByRole("button", { name: "병동 입장하기" }).click();
   await expect(page.getByRole("heading", { name: "사장님이 접수 내용을 확인 중이에요" })).toBeVisible();
 });
+
+test("사장님은 실제 캐시 기반 매출·정산과 강화 확률·로그를 확인한다", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("로그인 아이디").fill("owner");
+  await page.getByLabel("비밀번호", { exact: true }).fill("demo1234");
+  await page.getByRole("button", { name: "병동 입장하기" }).click();
+  await page.goto("/admin/settlements");
+  await expect(page.getByRole("heading", { name: "매출·정산 확인" })).toBeVisible();
+  await expect(page.getByText("612,000원", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("실제 캐시 미리보기 기준", { exact: true })).toBeVisible();
+  await page.goto("/admin/treatment");
+  await expect(page.getByRole("heading", { name: "단계별 강화 확률 설정" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "최근 강화 로그" })).toBeVisible();
+});
+
+test("강화 확률 변경 공지가 고객 화면에 표시된다", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("로그인 아이디").fill("owner");
+  await page.getByLabel("비밀번호", { exact: true }).fill("demo1234");
+  await page.getByRole("button", { name: "병동 입장하기" }).click();
+  await page.goto("/admin/treatment");
+  await page.getByLabel("7강 성공률").fill("59");
+  await page.locator(".enhancement-notice-editor textarea").fill("7강 성공률을 59%로 변경했습니다.");
+  await page.getByRole("button", { name: /확률 저장 및 고객 공시/ }).click();
+  await page.getByRole("button", { name: /쿠지병동 사장님/ }).click();
+  await page.goto("/");
+  await page.getByLabel("로그인 아이디").fill("patient");
+  await page.getByLabel("비밀번호", { exact: true }).fill("demo1234");
+  await page.getByRole("button", { name: "병동 입장하기" }).click();
+  await expect(page.getByText("7강 성공률을 59%로 변경했습니다.")).toBeVisible();
+  await expect(page.getByText("실제 캐시 미리보기", { exact: true })).toBeVisible();
+  await expect(page.getByText("59%", { exact: true }).first()).toBeVisible();
+});

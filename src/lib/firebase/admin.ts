@@ -4,6 +4,7 @@ import { applicationDefault, cert, getApps, initializeApp } from "firebase-admin
 import { getAuth } from "firebase-admin/auth";
 import { getDatabase } from "firebase-admin/database";
 import { adminPath, memberPath } from "./paths";
+import { clampTreatmentStage } from "@/lib/treatment";
 import type { HospitalMember, HospitalSession } from "@/types/hospital";
 
 function getAdminApp() {
@@ -55,7 +56,7 @@ export function safeMember(uid: string, raw: unknown): HospitalMember {
     role: "patient",
     status,
     points: Math.max(0, Number(value.points) || 0),
-    treatmentStage: Math.min(5, Math.max(0, Number(value.treatmentStage) || 0)),
+    treatmentStage: clampTreatmentStage(value.treatmentStage),
     createdAt: String(value.createdAt || ""),
     approvedAt: value.approvedAt ? String(value.approvedAt) : undefined,
     lastTreatmentAt: value.lastTreatmentAt ? String(value.lastTreatmentAt) : undefined,
