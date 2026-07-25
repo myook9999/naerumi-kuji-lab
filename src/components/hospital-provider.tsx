@@ -55,6 +55,8 @@ const HospitalContext = createContext<HospitalContextValue | null>(null);
 const sessionKey = "kuji-hospital:session";
 const membersKey = "kuji-hospital:members";
 const visibleKey = "kuji-hospital:board-visible";
+const credentialsKey = "kuji-hospital:demo-credentials";
+const defaultDemoCredentials: Record<string, string> = { owner: "demo1234", patient: "demo1234", pending: "demo1234", recovery: "demo1234" };
 
 function loginIdToEmail(loginId: string) {
   const normalized = loginId.trim().toLowerCase();
@@ -83,6 +85,7 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
   const [boardError, setBoardError] = useState("");
   const [members, setMembers] = useState<HospitalMember[]>(demoMembers);
   const [boardVisible, setVisible] = useState(true);
+  const [demoCredentials, setDemoCredentials] = useState<Record<string, string>>(defaultDemoCredentials);
 
   useEffect(() => {
     if (!firebaseMode) {
@@ -90,9 +93,11 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
         const savedSession = localStorage.getItem(sessionKey);
         const savedMembers = localStorage.getItem(membersKey);
         const savedVisible = localStorage.getItem(visibleKey);
+        const savedCredentials = localStorage.getItem(credentialsKey);
         if (savedSession) setSession(JSON.parse(savedSession));
         if (savedMembers) setMembers(JSON.parse(savedMembers));
         if (savedVisible) setVisible(savedVisible === "true");
+        if (savedCredentials) setDemoCredentials({ ...defaultDemoCredentials, ...JSON.parse(savedCredentials) });
       } catch { /* 손상된 데모 저장값은 초기값으로 복구한다. */ }
       setReady(true);
       return;
@@ -126,10 +131,11 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
     if (!firebaseMode) {
       localStorage.setItem(membersKey, JSON.stringify(members));
       localStorage.setItem(visibleKey, String(boardVisible));
+      localStorage.setItem(credentialsKey, JSON.stringify(demoCredentials));
       if (session) localStorage.setItem(sessionKey, JSON.stringify(session));
       else localStorage.removeItem(sessionKey);
     }
-  }, [firebaseMode, members, boardVisible, session]);
+  }, [firebaseMode, members, boardVisible, session, demoCredentials]);
 
   useEffect(() => {
     if (!firebaseMode || !session || session.status !== "approved") return;
@@ -143,7 +149,7 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
   const login = useCallback(async (loginId: string, password: string) => {
     const normalizedId = loginId.trim().toLowerCase();
     if (!firebaseMode) {
-      if (password !== "demo1234") throw new Error("아이디 또는 비밀번호를 확인해 주세요.");
+      if (demoCredentials[normalizedId] !== password) throw new Error("아이디 또는 비밀번호를 확인해 주세요.");
       const next: HospitalSession | undefined = normalizedId === "owner"
         ? { uid: "owner-demo", loginId: "owner", email: "owner@kujihospital.test", name: "쿠지병동 사장님", phone: "", role: "owner", status: "approved", points: 0, treatmentStage: 0 }
         : members.find((member) => member.loginId === normalizedId);
@@ -157,14 +163,17 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
     const result = await apiRequest<{ session: HospitalSession }>("/api/member/profile");
     setSession(result.session);
     return result.session;
-  }, [firebaseMode, members]);
+  }, [firebaseMode, members, demoCredentials]);
 
   const signup = useCallback(async (input: { loginId: string; password: string; nickname: string }) => {
     const loginId = input.loginId.trim().toLowerCase();
     if (!/^[a-z0-9._-]{4,24}$/.test(loginId)) throw new Error("아이디는 영문 소문자·숫자 조합 4~24자로 입력해 주세요.");
+    if (input.password.length < 8) throw new Error("비밀번호는 8자 이상 입력해 주세요.");
     if (!firebaseMode) {
       if (members.some((member) => member.loginId === loginId)) throw new Error("이미 사용 중인 아이디입니다.");
       setMembers((current) => [{ uid: crypto.randomUUID(), loginId, email: loginIdToEmail(loginId), name: input.nickname, phone: "", role: "patient", status: "pending", points: 0, treatmentStage: 0, createdAt: new Date().toISOString() }, ...current]);
+      // 시연 모드에서만 로컬 저장소에 보관하며 운영 모드는 Firebase Authentication을 사용한다.
+      setDemoCredentials((current) => ({ ...current, [loginId]: input.password }));
       return;
     }
     const firebase = getFirebaseClient();
