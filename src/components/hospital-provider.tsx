@@ -5,11 +5,11 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { toast } from "sonner";
 import { MAX_TREATMENT_STAGE } from "@/config/hospital";
-import previewBoardData from "@/data/kuji-byeongdong-preview.json";
+import previewBoardsData from "@/data/kuji-byeongdong-boards-preview.json";
 import { getFirebaseClient, isFirebaseMode, subscribeHospitalBoard } from "@/lib/firebase/client";
 import { resolveTreatmentOutcome } from "@/lib/treatment";
 import { defaultTreatmentSettings, sanitizeTreatmentSettings, validateTreatmentRates } from "@/lib/treatment-settings";
-import type { HospitalMember, HospitalSession, PublicBoardSnapshot, TreatmentLog, TreatmentRate, TreatmentResult, TreatmentSettings } from "@/types/hospital";
+import type { CustomerWinning, HospitalMember, HospitalSession, PublicBoardCollectionPreview, PublicBoardSnapshot, ShippingAddress, ShippingStatus, TreatmentLog, TreatmentRate, TreatmentResult, TreatmentSettings } from "@/types/hospital";
 
 type BoardConnection = "demo" | "preview" | "connecting" | "live" | "error";
 
@@ -18,12 +18,15 @@ interface HospitalContextValue {
   ready: boolean;
   firebaseMode: boolean;
   board: PublicBoardSnapshot;
+  boards: PublicBoardSnapshot[];
   boardConnection: BoardConnection;
   boardError: string;
   boardVisible: boolean;
   members: HospitalMember[];
   treatmentSettings: TreatmentSettings;
   treatmentLogs: TreatmentLog[];
+  winnings: CustomerWinning[];
+  shippingAddresses: Record<string, ShippingAddress>;
   login: (loginId: string, password: string) => Promise<HospitalSession>;
   signup: (input: { loginId: string; password: string; nickname: string }) => Promise<void>;
   logout: () => Promise<void>;
@@ -31,17 +34,38 @@ interface HospitalContextValue {
   changeMemberStatus: (uid: string, status: "approved" | "rejected") => Promise<void>;
   changePoints: (uid: string, amount: number, memo: string) => Promise<void>;
   setBoardVisible: (visible: boolean) => Promise<void>;
+  selectBoard: (id: string) => void;
   refreshTreatmentAdmin: () => Promise<TreatmentSettings | null>;
   saveTreatmentSettings: (rates: TreatmentRate[], notice: string) => Promise<void>;
   runTreatment: () => Promise<TreatmentResult>;
+  refreshFulfillment: () => Promise<void>;
+  saveShippingAddress: (address: Omit<ShippingAddress, "updatedAt">) => Promise<void>;
+  updateShipment: (id: string, shippingStatus: ShippingStatus, carrier: string, trackingNumber: string) => Promise<void>;
 }
 
-const demoBoard = previewBoardData as PublicBoardSnapshot;
+const previewCollection = previewBoardsData as PublicBoardCollectionPreview;
+const demoBoards = previewCollection.boards;
+const demoBoard = demoBoards[previewCollection.featuredIndex] ?? demoBoards[0];
 
 const demoMembers: HospitalMember[] = [
   { uid: "patient-1", loginId: "patient", email: "patient@kujihospital.test", name: "별밤 환자", phone: "010-1234-5678", role: "patient", status: "approved", points: 28000, treatmentStage: 6, createdAt: "2026-07-20T09:30:00.000Z", approvedAt: "2026-07-20T10:00:00.000Z" },
   { uid: "pending-1", loginId: "pending", email: "pending@kujihospital.test", name: "새봄 환자", phone: "010-9876-5432", role: "patient", status: "pending", points: 0, treatmentStage: 0, createdAt: "2026-07-25T01:20:00.000Z" },
   { uid: "patient-2", loginId: "recovery", email: "recovery@kujihospital.test", name: "행운 환자", phone: "010-5555-1212", role: "patient", status: "approved", points: 85000, treatmentStage: 11, createdAt: "2026-07-18T03:10:00.000Z", approvedAt: "2026-07-18T05:00:00.000Z" },
+];
+
+const emptyAddress: ShippingAddress = { recipient: "", phone: "", postalCode: "", address1: "", address2: "", memo: "", updatedAt: "" };
+const demoShippingAddresses: Record<string, ShippingAddress> = {
+  "patient-1": { ...emptyAddress },
+  "patient-2": { recipient: "행운 환자", phone: "010-5555-1212", postalCode: "04524", address1: "서울특별시 중구 세종대로 110", address2: "쿠지병동 2층", memo: "문 앞에 놓아주세요.", updatedAt: "2026-07-24T05:10:00.000Z" },
+};
+const demoWinnings: CustomerWinning[] = [
+  { id: "winning-demo-1", uid: "patient-1", loginId: "patient", name: "별밤 환자", boardName: "600장", prizeName: "여성형 거인A상", tier: "A상", wonAt: "2026-07-24T04:20:00.000Z", shippingStatus: "address_required" },
+  { id: "winning-demo-2", uid: "patient-1", loginId: "patient", name: "별밤 환자", boardName: "600장", prizeName: "아머드 올마이트", tier: "LAST상", wonAt: "2026-07-23T10:30:00.000Z", shippingStatus: "preparing" },
+  { id: "winning-demo-3", uid: "patient-2", loginId: "recovery", name: "행운 환자", boardName: "1000장 2탄", prizeName: "디자인코코고죠", tier: "A상", wonAt: "2026-07-22T08:45:00.000Z", shippingStatus: "shipped", carrier: "CJ대한통운", trackingNumber: "123456789012", shippedAt: "2026-07-24T02:00:00.000Z" },
+];
+const demoTreatmentLogs: TreatmentLog[] = [
+  { id: "treatment-demo-1", uid: "patient-2", loginId: "recovery", name: "행운 환자", outcome: "success", success: true, destroyed: false, beforeStage: 10, afterStage: 11, cost: 12000, points: 85000, probability: 25, destroyProbability: 25, createdAt: "2026-07-24T06:15:00.000Z" },
+  { id: "treatment-demo-2", uid: "patient-1", loginId: "patient", name: "별밤 환자", outcome: "failed", success: false, destroyed: false, beforeStage: 6, afterStage: 6, cost: 5000, points: 28000, probability: 58, destroyProbability: 8, createdAt: "2026-07-24T05:30:00.000Z" },
 ];
 
 const HospitalContext = createContext<HospitalContextValue | null>(null);
@@ -51,6 +75,8 @@ const visibleKey = "kuji-hospital:board-visible";
 const credentialsKey = "kuji-hospital:demo-credentials";
 const treatmentSettingsKey = "kuji-hospital:treatment-settings";
 const treatmentLogsKey = "kuji-hospital:treatment-logs";
+const winningsKey = "kuji-hospital:winnings";
+const shippingAddressesKey = "kuji-hospital:shipping-addresses";
 const defaultDemoCredentials: Record<string, string> = { owner: "demo1234", patient: "demo1234", pending: "demo1234", recovery: "demo1234" };
 
 function loginIdToEmail(loginId: string) {
@@ -76,13 +102,16 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<HospitalSession | null>(null);
   const [ready, setReady] = useState(false);
   const [board, setBoard] = useState(demoBoard);
+  const [boards, setBoards] = useState<PublicBoardSnapshot[]>(demoBoards);
   const [boardConnection, setBoardConnection] = useState<BoardConnection>(firebaseMode ? "connecting" : "preview");
   const [boardError, setBoardError] = useState("");
   const [members, setMembers] = useState<HospitalMember[]>(demoMembers);
   const [boardVisible, setVisible] = useState(true);
   const [demoCredentials, setDemoCredentials] = useState<Record<string, string>>(defaultDemoCredentials);
   const [treatmentSettings, setTreatmentSettings] = useState<TreatmentSettings>(defaultTreatmentSettings);
-  const [treatmentLogs, setTreatmentLogs] = useState<TreatmentLog[]>([]);
+  const [treatmentLogs, setTreatmentLogs] = useState<TreatmentLog[]>(demoTreatmentLogs);
+  const [winnings, setWinnings] = useState<CustomerWinning[]>(demoWinnings);
+  const [shippingAddresses, setShippingAddresses] = useState<Record<string, ShippingAddress>>(demoShippingAddresses);
 
   useEffect(() => {
     if (!firebaseMode) {
@@ -93,12 +122,16 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
         const savedCredentials = localStorage.getItem(credentialsKey);
         const savedTreatmentSettings = localStorage.getItem(treatmentSettingsKey);
         const savedTreatmentLogs = localStorage.getItem(treatmentLogsKey);
+        const savedWinnings = localStorage.getItem(winningsKey);
+        const savedShippingAddresses = localStorage.getItem(shippingAddressesKey);
         if (savedSession) setSession(JSON.parse(savedSession));
         if (savedMembers) setMembers(JSON.parse(savedMembers));
         if (savedVisible) setVisible(savedVisible === "true");
         if (savedCredentials) setDemoCredentials({ ...defaultDemoCredentials, ...JSON.parse(savedCredentials) });
         if (savedTreatmentSettings) setTreatmentSettings(sanitizeTreatmentSettings(JSON.parse(savedTreatmentSettings)));
         if (savedTreatmentLogs) setTreatmentLogs(JSON.parse(savedTreatmentLogs));
+        if (savedWinnings) setWinnings(JSON.parse(savedWinnings));
+        if (savedShippingAddresses) setShippingAddresses(JSON.parse(savedShippingAddresses));
       } catch { /* 손상된 데모 저장값은 초기값으로 복구한다. */ }
       setReady(true);
       return;
@@ -139,16 +172,18 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem(credentialsKey, JSON.stringify(demoCredentials));
       localStorage.setItem(treatmentSettingsKey, JSON.stringify(treatmentSettings));
       localStorage.setItem(treatmentLogsKey, JSON.stringify(treatmentLogs.slice(0, 100)));
+      localStorage.setItem(winningsKey, JSON.stringify(winnings));
+      localStorage.setItem(shippingAddressesKey, JSON.stringify(shippingAddresses));
       if (session) localStorage.setItem(sessionKey, JSON.stringify(session));
       else localStorage.removeItem(sessionKey);
     }
-  }, [firebaseMode, members, boardVisible, session, demoCredentials, treatmentSettings, treatmentLogs]);
+  }, [firebaseMode, members, boardVisible, session, demoCredentials, treatmentSettings, treatmentLogs, winnings, shippingAddresses]);
 
   useEffect(() => {
     if (!firebaseMode || !session || session.status !== "approved") return;
     setBoardConnection("connecting");
     return subscribeHospitalBoard(
-      (next) => { setBoard(next); setBoardConnection("live"); setBoardError(""); },
+      (next) => { setBoard(next); setBoards((current) => current.map((item) => item.id === demoBoard.id ? next : item)); setBoardConnection("live"); setBoardError(""); },
       (message) => { setBoardConnection("error"); setBoardError(message); },
     );
   }, [firebaseMode, session?.uid, session?.status]);
@@ -236,6 +271,11 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
     toast.success(visible ? "환자 화면에 쿠지판을 공개했습니다." : "환자 화면의 쿠지판을 숨겼습니다.");
   }, [firebaseMode]);
 
+  const selectBoard = useCallback((id: string) => {
+    const selected = boards.find((item) => item.id === id);
+    if (selected) setBoard(selected);
+  }, [boards]);
+
   const refreshTreatmentAdmin = useCallback(async () => {
     if (!firebaseMode) return null;
     const result = await apiRequest<{ settings: TreatmentSettings; logs: TreatmentLog[] }>("/api/admin/treatment");
@@ -276,7 +316,45 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
     return treatment;
   }, [firebaseMode, session, treatmentSettings.rates]);
 
-  const value = useMemo<HospitalContextValue>(() => ({ session, ready, firebaseMode, board, boardConnection, boardError, boardVisible, members, treatmentSettings, treatmentLogs, login, signup, logout, refreshMembers, changeMemberStatus, changePoints, setBoardVisible, refreshTreatmentAdmin, saveTreatmentSettings, runTreatment }), [session, ready, firebaseMode, board, boardConnection, boardError, boardVisible, members, treatmentSettings, treatmentLogs, login, signup, logout, refreshMembers, changeMemberStatus, changePoints, setBoardVisible, refreshTreatmentAdmin, saveTreatmentSettings, runTreatment]);
+  const refreshFulfillment = useCallback(async () => {
+    if (!firebaseMode || !session) return;
+    if (session.role === "owner") {
+      const result = await apiRequest<{ winnings: CustomerWinning[]; addresses: Record<string, ShippingAddress> }>("/api/admin/fulfillment");
+      setWinnings(result.winnings);
+      setShippingAddresses(result.addresses);
+      return;
+    }
+    const result = await apiRequest<{ winnings: CustomerWinning[]; address: ShippingAddress }>("/api/member/fulfillment");
+    setWinnings(result.winnings);
+    setShippingAddresses((current) => ({ ...current, [session.uid]: result.address }));
+  }, [firebaseMode, session]);
+
+  const saveShippingAddress = useCallback(async (input: Omit<ShippingAddress, "updatedAt">) => {
+    if (!session || session.role !== "patient") throw new Error("고객 계정으로 로그인해 주세요.");
+    if (!input.recipient.trim() || !input.phone.trim() || !input.postalCode.trim() || !input.address1.trim()) throw new Error("필수 배송지 정보를 입력해 주세요.");
+    const address = firebaseMode
+      ? (await apiRequest<{ address: ShippingAddress }>("/api/member/fulfillment", { method: "PATCH", body: JSON.stringify(input) })).address
+      : { ...input, updatedAt: new Date().toISOString() };
+    setShippingAddresses((current) => ({ ...current, [session.uid]: address }));
+    toast.success("배송지를 안전하게 저장했습니다.");
+  }, [firebaseMode, session]);
+
+  const updateShipment = useCallback(async (id: string, shippingStatus: ShippingStatus, carrier: string, trackingNumber: string) => {
+    if (!session || session.role !== "owner") throw new Error("사장님 권한이 필요합니다.");
+    let next: CustomerWinning;
+    if (firebaseMode) {
+      next = (await apiRequest<{ winning: CustomerWinning }>("/api/admin/fulfillment", { method: "PATCH", body: JSON.stringify({ id, shippingStatus, carrier, trackingNumber }) })).winning;
+    } else {
+      const current = winnings.find((item) => item.id === id);
+      if (!current) throw new Error("당첨 기록을 찾을 수 없습니다.");
+      if (shippingStatus === "shipped" && (!carrier.trim() || !trackingNumber.trim())) throw new Error("택배사와 운송장 번호를 입력해 주세요.");
+      next = { ...current, shippingStatus, carrier: carrier.trim() || undefined, trackingNumber: trackingNumber.trim() || undefined, shippedAt: shippingStatus === "shipped" || shippingStatus === "delivered" ? current.shippedAt || new Date().toISOString() : undefined };
+    }
+    setWinnings((current) => current.map((item) => item.id === id ? next : item));
+    toast.success("배송 상태를 반영했습니다.");
+  }, [firebaseMode, session, winnings]);
+
+  const value = useMemo<HospitalContextValue>(() => ({ session, ready, firebaseMode, board, boards, boardConnection, boardError, boardVisible, members, treatmentSettings, treatmentLogs, winnings, shippingAddresses, login, signup, logout, refreshMembers, changeMemberStatus, changePoints, setBoardVisible, selectBoard, refreshTreatmentAdmin, saveTreatmentSettings, runTreatment, refreshFulfillment, saveShippingAddress, updateShipment }), [session, ready, firebaseMode, board, boards, boardConnection, boardError, boardVisible, members, treatmentSettings, treatmentLogs, winnings, shippingAddresses, login, signup, logout, refreshMembers, changeMemberStatus, changePoints, setBoardVisible, selectBoard, refreshTreatmentAdmin, saveTreatmentSettings, runTreatment, refreshFulfillment, saveShippingAddress, updateShipment]);
   return <HospitalContext.Provider value={value}>{children}</HospitalContext.Provider>;
 }
 

@@ -24,9 +24,13 @@ export interface PublicPrize {
   name: string;
   image: string;
   available: boolean;
+  remainingCount?: number;
 }
 
 export interface PublicBoardSnapshot {
+  id?: string;
+  sourceIndex?: number;
+  isProgramCurrent?: boolean;
   branchId: "kuji-byeongdong";
   boardName: string;
   totalCards: number;
@@ -35,7 +39,50 @@ export interface PublicBoardSnapshot {
   price: string;
   prizes: PublicPrize[];
   lastOne: PublicPrize | null;
+  customerResults?: BoardCustomerResult[];
   updatedAt: string;
+}
+
+export interface BoardCustomerResult {
+  id: string;
+  nickname: string;
+  totalDraws: number;
+  randomGoodsCount: number;
+  upperPrizes: Array<{ name: string; count: number }>;
+}
+
+export interface PublicBoardCollectionPreview {
+  sourceUpdatedAt: string;
+  currentIndex: number;
+  featuredIndex: number;
+  boards: PublicBoardSnapshot[];
+}
+
+export type ShippingStatus = "address_required" | "preparing" | "shipped" | "delivered";
+
+export interface ShippingAddress {
+  recipient: string;
+  phone: string;
+  postalCode: string;
+  address1: string;
+  address2: string;
+  memo: string;
+  updatedAt: string;
+}
+
+export interface CustomerWinning {
+  id: string;
+  uid: string;
+  loginId: string;
+  name: string;
+  boardName: string;
+  prizeName: string;
+  tier: string;
+  wonAt: string;
+  shippingStatus: ShippingStatus;
+  carrier?: string;
+  trackingNumber?: string;
+  shippedAt?: string;
 }
 
 export interface TreatmentResult {

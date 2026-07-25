@@ -1,0 +1,1179 @@
+{
+  "sourceUpdatedAt": "2026-07-02T17:06:38.550Z",
+  "currentIndex": 9,
+  "featuredIndex": 7,
+  "boards": [
+    {
+      "id": "cache-board-0",
+      "sourceIndex": 0,
+      "isProgramCurrent": false,
+      "branchId": "kuji-byeongdong",
+      "boardName": "600장",
+      "totalCards": 600,
+      "openedCount": 300,
+      "remainingCards": 300,
+      "price": "10,000",
+      "prizes": [
+        {
+          "id": "board-0-prize-0",
+          "name": "여성형 거인A상",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-0-prize-1",
+          "name": "디자인코코고죠",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-0-prize-2",
+          "name": "초대형거인",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-0-prize-3",
+          "name": "초사이어인 드래곤볼 A+E",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-0-prize-4",
+          "name": "헬로 굿스마일 아르민",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-0-prize-5",
+          "name": "핸콕 A상",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-0-prize-6",
+          "name": "퍼니나이츠 무잔",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-0-prize-7",
+          "name": "기유 사비토 A상",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-0-prize-8",
+          "name": "애니플렉스 네즈코",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-0-prize-9",
+          "name": "팝마트 탄생화 5종(기유,텐겐,시노부,탄지로,이노스케)",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-0-prize-10",
+          "name": "드볼 히스토리2 C상",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-0-prize-11",
+          "name": "랜덤반프(원피스)",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-0-prize-12",
+          "name": "랜덤반프(원피스)",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-0-prize-13",
+          "name": "랜덤반프(원피스)",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-0-prize-14",
+          "name": "진격거 프랭크 버거 망토",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-0-prize-15",
+          "name": "초코노코(거인)I상 4개(개봉)",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-0-prize-16",
+          "name": "짱구 머머리 삼형제 B상",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-0-prize-17",
+          "name": "짱구 토페마 라스트원",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-0-prize-18",
+          "name": "아머드 올마이트 라스트원",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        }
+      ],
+      "lastOne": {
+        "id": "board-0-last-one",
+        "name": "짐승거인A상",
+        "image": "",
+        "available": true,
+        "remainingCount": 1
+      },
+      "customerResults": [
+        {
+          "id": "board-0-customer-0",
+          "nickname": "이혜민",
+          "totalDraws": 189,
+          "randomGoodsCount": 178,
+          "upperPrizes": [
+            {
+              "name": "초대형거인",
+              "count": 1
+            },
+            {
+              "name": "핸콕 A상",
+              "count": 1
+            },
+            {
+              "name": "짱구 토페마 라스트원",
+              "count": 1
+            },
+            {
+              "name": "퍼니나이츠 무잔",
+              "count": 1
+            },
+            {
+              "name": "디자인코코고죠",
+              "count": 1
+            },
+            {
+              "name": "팝마트 탄생화 5종(기유,텐겐,시노부,탄지로,이노스케)",
+              "count": 1
+            },
+            {
+              "name": "랜덤반프(원피스)",
+              "count": 3
+            },
+            {
+              "name": "초코노코(거인)I상 4개(개봉)",
+              "count": 1
+            },
+            {
+              "name": "진격거 프랭크 버거 망토",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "board-0-customer-1",
+          "nickname": "아라마키",
+          "totalDraws": 25,
+          "randomGoodsCount": 23,
+          "upperPrizes": [
+            {
+              "name": "초사이어인 드래곤볼 A+E",
+              "count": 1
+            },
+            {
+              "name": "여성형 거인A상",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "board-0-customer-2",
+          "nickname": "주나",
+          "totalDraws": 29,
+          "randomGoodsCount": 28,
+          "upperPrizes": [
+            {
+              "name": "기유 사비토 A상",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "board-0-customer-3",
+          "nickname": "쿠죠",
+          "totalDraws": 4,
+          "randomGoodsCount": 3,
+          "upperPrizes": [
+            {
+              "name": "애니플렉스 네즈코",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "board-0-customer-4",
+          "nickname": "꽁치가처넌",
+          "totalDraws": 40,
+          "randomGoodsCount": 40,
+          "upperPrizes": []
+        },
+        {
+          "id": "board-0-customer-5",
+          "nickname": "쿠리",
+          "totalDraws": 10,
+          "randomGoodsCount": 10,
+          "upperPrizes": []
+        },
+        {
+          "id": "board-0-customer-6",
+          "nickname": "시마잉",
+          "totalDraws": 3,
+          "randomGoodsCount": 3,
+          "upperPrizes": []
+        }
+      ],
+      "updatedAt": "2026-07-02T17:06:38.550Z"
+    },
+    {
+      "id": "cache-board-1",
+      "sourceIndex": 1,
+      "isProgramCurrent": false,
+      "branchId": "kuji-byeongdong",
+      "boardName": "1000장 2탄",
+      "totalCards": 1000,
+      "openedCount": 1000,
+      "remainingCards": 0,
+      "price": "10,000",
+      "prizes": [
+        {
+          "id": "board-1-prize-0",
+          "name": "투비컨티뉴(내수용)",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-1",
+          "name": "아머드 올마이트(구버전)",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-2",
+          "name": "스피리테일 토가 좌상",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-3",
+          "name": "시노비의 유대 이타치 D상",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-4",
+          "name": "드래곤볼 히스토리2 C상",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-5",
+          "name": "페넥스 파워",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-6",
+          "name": "리카 라스트원(사멸회유 2)",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-7",
+          "name": "월히미 미도리야 A상",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-8",
+          "name": "황금 올마이트",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-9",
+          "name": "팝마트 프리렌+페른",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-10",
+          "name": "데스노트 B상 아크릴 3종세트",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-11",
+          "name": "팝업퍼레이드 마린",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-12",
+          "name": "비큐트 마린",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-13",
+          "name": "유라유라 마린",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-14",
+          "name": "가히리 D상 람보뿔도장 4종세트",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-15",
+          "name": "펫컴퍼니 호시노",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-16",
+          "name": "턱거인(박스 아야)",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-17",
+          "name": "애니플렉스 마린(수영복)",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-18",
+          "name": "시가라키 B상",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-19",
+          "name": "바쿠고 D상",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-20",
+          "name": "사멸회유2 타카바",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-1-prize-21",
+          "name": "사멸회유 2 이시고리류",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        }
+      ],
+      "lastOne": {
+        "id": "board-1-last-one",
+        "name": "교메이 A상",
+        "image": "",
+        "available": false,
+        "remainingCount": 0
+      },
+      "customerResults": [
+        {
+          "id": "board-1-customer-0",
+          "nickname": "이혜민",
+          "totalDraws": 958,
+          "randomGoodsCount": 937,
+          "upperPrizes": [
+            {
+              "name": "[라스트원]",
+              "count": 1
+            },
+            {
+              "name": "스피리테일 토가 좌상",
+              "count": 1
+            },
+            {
+              "name": "사멸회유2 타카바",
+              "count": 1
+            },
+            {
+              "name": "팝마트 프리렌+페른",
+              "count": 1
+            },
+            {
+              "name": "애니플렉스 마린(수영복)",
+              "count": 1
+            },
+            {
+              "name": "드래곤볼 히스토리2 C상",
+              "count": 1
+            },
+            {
+              "name": "리카 라스트원(사멸회유 2)",
+              "count": 1
+            },
+            {
+              "name": "유라유라 마린",
+              "count": 1
+            },
+            {
+              "name": "가히리 D상 람보뿔도장 4종세트",
+              "count": 1
+            },
+            {
+              "name": "페넥스 파워",
+              "count": 1
+            },
+            {
+              "name": "아머드 올마이트(구버전)",
+              "count": 1
+            },
+            {
+              "name": "턱거인(박스 아야)",
+              "count": 1
+            },
+            {
+              "name": "투비컨티뉴(내수용)",
+              "count": 1
+            },
+            {
+              "name": "비큐트 마린",
+              "count": 1
+            },
+            {
+              "name": "시가라키 B상",
+              "count": 1
+            },
+            {
+              "name": "바쿠고 D상",
+              "count": 1
+            },
+            {
+              "name": "데스노트 B상 아크릴 3종세트",
+              "count": 1
+            },
+            {
+              "name": "시노비의 유대 이타치 D상",
+              "count": 1
+            },
+            {
+              "name": "황금 올마이트",
+              "count": 1
+            },
+            {
+              "name": "팝업퍼레이드 마린",
+              "count": 1
+            },
+            {
+              "name": "사멸회유 2 이시고리류",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "board-1-customer-1",
+          "nickname": "리쿠",
+          "totalDraws": 15,
+          "randomGoodsCount": 14,
+          "upperPrizes": [
+            {
+              "name": "펫컴퍼니 호시노",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "board-1-customer-2",
+          "nickname": "원피스",
+          "totalDraws": 10,
+          "randomGoodsCount": 9,
+          "upperPrizes": [
+            {
+              "name": "월히미 미도리야 A상",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "board-1-customer-3",
+          "nickname": "아라마키",
+          "totalDraws": 10,
+          "randomGoodsCount": 10,
+          "upperPrizes": []
+        },
+        {
+          "id": "board-1-customer-4",
+          "nickname": "최애가넘마나",
+          "totalDraws": 4,
+          "randomGoodsCount": 4,
+          "upperPrizes": []
+        },
+        {
+          "id": "board-1-customer-5",
+          "nickname": "신의손",
+          "totalDraws": 2,
+          "randomGoodsCount": 2,
+          "upperPrizes": []
+        },
+        {
+          "id": "board-1-customer-6",
+          "nickname": "덩기덕쿵기르",
+          "totalDraws": 1,
+          "randomGoodsCount": 1,
+          "upperPrizes": []
+        }
+      ],
+      "updatedAt": "2026-07-02T17:06:38.550Z"
+    },
+    {
+      "id": "cache-board-2",
+      "sourceIndex": 2,
+      "isProgramCurrent": false,
+      "branchId": "kuji-byeongdong",
+      "boardName": "창모자쿠",
+      "totalCards": 90,
+      "openedCount": 10,
+      "remainingCards": 80,
+      "price": "16000",
+      "prizes": [
+        {
+          "id": "board-2-prize-0",
+          "name": "턱거인(박스 아야)",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-2-prize-1",
+          "name": "황금 올마이트 LO",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-2-prize-2",
+          "name": "간바레 데쿠 C상",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-2-prize-3",
+          "name": "벽거인 I상",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-2-prize-4",
+          "name": "포치타 저금통",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-2-prize-5",
+          "name": "팔버스 에렌",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-2-prize-6",
+          "name": "헬굿스 아르민",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-2-prize-7",
+          "name": "포인트 6000",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-2-prize-8",
+          "name": "가히리 링 대공,번개,태양",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        }
+      ],
+      "lastOne": {
+        "id": "board-2-last-one",
+        "name": "시가라키 B상",
+        "image": "",
+        "available": true,
+        "remainingCount": 1
+      },
+      "customerResults": [
+        {
+          "id": "board-2-customer-0",
+          "nickname": "쿠지몽",
+          "totalDraws": 10,
+          "randomGoodsCount": 9,
+          "upperPrizes": [
+            {
+              "name": "간바레 데쿠 C상",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-07-02T17:06:38.550Z"
+    },
+    {
+      "id": "cache-board-3",
+      "sourceIndex": 3,
+      "isProgramCurrent": false,
+      "branchId": "kuji-byeongdong",
+      "boardName": "가히리 E상",
+      "totalCards": 50,
+      "openedCount": 50,
+      "remainingCards": 0,
+      "price": "10,000",
+      "prizes": [
+        {
+          "id": "board-3-prize-0",
+          "name": "가히리 E상",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        }
+      ],
+      "lastOne": {
+        "id": "board-3-last-one",
+        "name": "",
+        "image": "",
+        "available": false,
+        "remainingCount": 0
+      },
+      "customerResults": [
+        {
+          "id": "board-3-customer-0",
+          "nickname": "아라마키",
+          "totalDraws": 50,
+          "randomGoodsCount": 49,
+          "upperPrizes": [
+            {
+              "name": "가히리 E상",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-07-02T17:06:38.550Z"
+    },
+    {
+      "id": "cache-board-4",
+      "sourceIndex": 4,
+      "isProgramCurrent": false,
+      "branchId": "kuji-byeongdong",
+      "boardName": "초대형 한 찾",
+      "totalCards": 90,
+      "openedCount": 78,
+      "remainingCards": 12,
+      "price": "10,000",
+      "prizes": [
+        {
+          "id": "board-4-prize-0",
+          "name": "초대형",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        }
+      ],
+      "lastOne": {
+        "id": "board-4-last-one",
+        "name": "",
+        "image": "",
+        "available": true,
+        "remainingCount": 1
+      },
+      "customerResults": [
+        {
+          "id": "board-4-customer-0",
+          "nickname": "거인중독",
+          "totalDraws": 39,
+          "randomGoodsCount": 38,
+          "upperPrizes": [
+            {
+              "name": "초대형",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "board-4-customer-1",
+          "nickname": "아라마키",
+          "totalDraws": 39,
+          "randomGoodsCount": 39,
+          "upperPrizes": []
+        }
+      ],
+      "updatedAt": "2026-07-02T17:06:38.550Z"
+    },
+    {
+      "id": "cache-board-5",
+      "sourceIndex": 5,
+      "isProgramCurrent": false,
+      "branchId": "kuji-byeongdong",
+      "boardName": "이타치 한찾",
+      "totalCards": 70,
+      "openedCount": 48,
+      "remainingCards": 22,
+      "price": "10,000",
+      "prizes": [
+        {
+          "id": "board-5-prize-0",
+          "name": "최애님이 좋아하는 이타칭",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        }
+      ],
+      "lastOne": {
+        "id": "board-5-last-one",
+        "name": "",
+        "image": "",
+        "available": true,
+        "remainingCount": 1
+      },
+      "customerResults": [
+        {
+          "id": "board-5-customer-0",
+          "nickname": "최애가넘마나",
+          "totalDraws": 46,
+          "randomGoodsCount": 45,
+          "upperPrizes": [
+            {
+              "name": "최애님이 좋아하는 이타칭",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "board-5-customer-1",
+          "nickname": "tws",
+          "totalDraws": 2,
+          "randomGoodsCount": 2,
+          "upperPrizes": []
+        }
+      ],
+      "updatedAt": "2026-07-02T17:06:38.550Z"
+    },
+    {
+      "id": "cache-board-6",
+      "sourceIndex": 6,
+      "isProgramCurrent": false,
+      "branchId": "kuji-byeongdong",
+      "boardName": "lc리바이",
+      "totalCards": 88,
+      "openedCount": 49,
+      "remainingCards": 39,
+      "price": "10,000",
+      "prizes": [
+        {
+          "id": "board-6-prize-0",
+          "name": "LC리바이",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        }
+      ],
+      "lastOne": {
+        "id": "board-6-last-one",
+        "name": "",
+        "image": "",
+        "available": true,
+        "remainingCount": 1
+      },
+      "customerResults": [
+        {
+          "id": "board-6-customer-0",
+          "nickname": "싱싱한깻잎",
+          "totalDraws": 49,
+          "randomGoodsCount": 48,
+          "upperPrizes": [
+            {
+              "name": "LC리바이",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-07-02T17:06:38.550Z"
+    },
+    {
+      "id": "cache-board-7",
+      "sourceIndex": 7,
+      "isProgramCurrent": false,
+      "branchId": "kuji-byeongdong",
+      "boardName": "600장",
+      "totalCards": 500,
+      "openedCount": 34,
+      "remainingCards": 466,
+      "price": "18000",
+      "prizes": [
+        {
+          "id": "board-7-prize-0",
+          "name": "여성형 거인",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-1",
+          "name": "스피리테일 토가 ver. 빌런",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-2",
+          "name": "디자인코코 고죠",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-3",
+          "name": "스피리테일 츠유",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-4",
+          "name": "알터시노부",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-5",
+          "name": "리바이 C",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-6",
+          "name": "토가 우라라카 LO",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-7",
+          "name": "최애의 아이 A상",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-8",
+          "name": "가히리 링 F상(대공,번개,태양)",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-9",
+          "name": "유타 g상",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-10",
+          "name": "타카바 H상",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-11",
+          "name": "나루토 선인모드 A상+페인 초코노코3개(개봉2,미개봉1)",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-12",
+          "name": "올포원 E상",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-13",
+          "name": "가히리 H상 세트(10개)",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        },
+        {
+          "id": "board-7-prize-14",
+          "name": "주술 하위상 세트",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-15",
+          "name": "블리치 하위상 세트",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-16",
+          "name": "드래곤볼 하위상 세트",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-17",
+          "name": "고죠&게토 룩업",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-18",
+          "name": "애니플렉스 수영복 마린(박스아픔)",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-19",
+          "name": "드래곤볼 수련 A상 손오공&크리링",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        },
+        {
+          "id": "board-7-prize-20",
+          "name": "헬로굿스마일 아르민",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        }
+      ],
+      "lastOne": {
+        "id": "board-7-last-one",
+        "name": "아머드 올마이트",
+        "image": "",
+        "available": true,
+        "remainingCount": 1
+      },
+      "customerResults": [
+        {
+          "id": "board-7-customer-0",
+          "nickname": "거인중독",
+          "totalDraws": 6,
+          "randomGoodsCount": 5,
+          "upperPrizes": [
+            {
+              "name": "가히리 H상 세트(10개)",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "board-7-customer-1",
+          "nickname": "싱싱한깻잎",
+          "totalDraws": 12,
+          "randomGoodsCount": 12,
+          "upperPrizes": []
+        },
+        {
+          "id": "board-7-customer-2",
+          "nickname": "김겨울",
+          "totalDraws": 11,
+          "randomGoodsCount": 11,
+          "upperPrizes": []
+        },
+        {
+          "id": "board-7-customer-3",
+          "nickname": "타코",
+          "totalDraws": 3,
+          "randomGoodsCount": 3,
+          "upperPrizes": []
+        },
+        {
+          "id": "board-7-customer-4",
+          "nickname": "쿠지초보",
+          "totalDraws": 1,
+          "randomGoodsCount": 1,
+          "upperPrizes": []
+        },
+        {
+          "id": "board-7-customer-5",
+          "nickname": "시마잉",
+          "totalDraws": 1,
+          "randomGoodsCount": 1,
+          "upperPrizes": []
+        }
+      ],
+      "updatedAt": "2026-07-02T17:06:38.550Z"
+    },
+    {
+      "id": "cache-board-8",
+      "sourceIndex": 8,
+      "isProgramCurrent": false,
+      "branchId": "kuji-byeongdong",
+      "boardName": "스텔스 바쿠고 한찾",
+      "totalCards": 45,
+      "openedCount": 32,
+      "remainingCards": 13,
+      "price": "10,000",
+      "prizes": [
+        {
+          "id": "board-8-prize-0",
+          "name": "스텔스 바쿠고",
+          "image": "",
+          "available": false,
+          "remainingCount": 0
+        }
+      ],
+      "lastOne": {
+        "id": "board-8-last-one",
+        "name": "",
+        "image": "",
+        "available": true,
+        "remainingCount": 1
+      },
+      "customerResults": [
+        {
+          "id": "board-8-customer-0",
+          "nickname": "거인중독",
+          "totalDraws": 11,
+          "randomGoodsCount": 10,
+          "upperPrizes": [
+            {
+              "name": "스텔스 바쿠고",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "id": "board-8-customer-1",
+          "nickname": "이신우",
+          "totalDraws": 11,
+          "randomGoodsCount": 11,
+          "upperPrizes": []
+        },
+        {
+          "id": "board-8-customer-2",
+          "nickname": "시마잉",
+          "totalDraws": 10,
+          "randomGoodsCount": 10,
+          "upperPrizes": []
+        }
+      ],
+      "updatedAt": "2026-07-02T17:06:38.550Z"
+    },
+    {
+      "id": "cache-board-9",
+      "sourceIndex": 9,
+      "isProgramCurrent": true,
+      "branchId": "kuji-byeongdong",
+      "boardName": "test",
+      "totalCards": 100,
+      "openedCount": 1,
+      "remainingCards": 99,
+      "price": "10,000",
+      "prizes": [
+        {
+          "id": "board-9-prize-0",
+          "name": "A상 상품",
+          "image": "",
+          "available": true,
+          "remainingCount": 1
+        }
+      ],
+      "lastOne": {
+        "id": "board-9-last-one",
+        "name": "라스트원 상",
+        "image": "",
+        "available": true,
+        "remainingCount": 1
+      },
+      "customerResults": [
+        {
+          "id": "board-9-customer-0",
+          "nickname": "dd",
+          "totalDraws": 1,
+          "randomGoodsCount": 1,
+          "upperPrizes": []
+        }
+      ],
+      "updatedAt": "2026-07-02T17:06:38.550Z"
+    }
+  ]
+}

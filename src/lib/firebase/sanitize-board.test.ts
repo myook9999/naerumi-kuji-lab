@@ -7,6 +7,9 @@ describe("쿠지병동 Firebase 안전 경계", () => {
     expect(firebasePaths.boardSnapshot).toBe("branches/kuji-byeongdong/boards/current");
     expect(Object.values(firebasePaths).join(" ")).not.toContain("ownerApi");
     expect(Object.values(firebasePaths).join(" ")).not.toContain("serverData");
+    expect(firebasePaths.webRoot).toBe("web/kuji-byeongdong");
+    expect(firebasePaths.winnings).toBe("web/kuji-byeongdong/winnings");
+    expect(firebasePaths.shippingAddresses).toBe("web/kuji-byeongdong/shippingAddresses");
   });
 
   it("공개 화면에 불필요한 원본 필드를 전달하지 않는다", () => {
