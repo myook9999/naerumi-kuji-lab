@@ -27,6 +27,29 @@ export interface PublicPrize {
   remainingCount?: number;
 }
 
+export interface PublicSalesDailyBucket {
+  date: string;
+  ticketCount: number;
+  grossSales: number;
+}
+
+export interface PublicSalesMonthlyBucket {
+  month: string;
+  ticketCount: number;
+  grossSales: number;
+}
+
+export interface PublicBoardSales {
+  unitPrice: number;
+  ticketCount: number;
+  grossSales: number;
+  trackedTickets: number;
+  trackedGrossSales: number;
+  unclassifiedTickets: number;
+  daily: PublicSalesDailyBucket[];
+  monthly: PublicSalesMonthlyBucket[];
+}
+
 export interface PublicBoardSnapshot {
   id?: string;
   sourceIndex?: number;
@@ -39,6 +62,7 @@ export interface PublicBoardSnapshot {
   price: string;
   prizes: PublicPrize[];
   lastOne: PublicPrize | null;
+  sales?: PublicBoardSales;
   customerResults?: BoardCustomerResult[];
   updatedAt: string;
 }
