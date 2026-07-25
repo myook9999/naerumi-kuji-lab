@@ -1,1 +1,1 @@
-import {Winners} from "@/components/admin/winners";export default function Page(){return <Winners/>}
+import {redirect} from "next/navigation"; export default function Page(){redirect("/admin/dashboard")}

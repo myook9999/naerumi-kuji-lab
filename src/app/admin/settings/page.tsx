@@ -1,1 +1,1 @@
-import {SettingsPage} from "@/components/admin/operations";export default function Page(){return <SettingsPage/>}
+import {redirect} from "next/navigation"; export default function Page(){redirect("/admin/dashboard")}

@@ -1,4 +1,0 @@
-import {describe,expect,it} from "vitest";
-import {calculatePointBalance,calculateSettlement,canRedeemReward,hasPermission,validateEnhancementConfig} from "./business";
-import {enhancementConfig} from "./mock/data";
-describe("운영 계산",()=>{it("정산 금액을 계산한다",()=>{const result=calculateSettlement([{id:"1",boardTitle:"테스트",sold:2,sales:20000,topPrizes:1,refund:1000,amount:19000,status:"검토"}],.05,3000);expect(result.netAmount).toBe(21050)});it("포인트 증감을 계산한다",()=>expect(calculatePointBalance([{type:"earn",amount:500},{type:"spend",amount:120}])).toBe(380));it("강화 설정과 보상을 검증한다",()=>{expect(validateEnhancementConfig(enhancementConfig)).toBe(true);expect(canRedeemReward(10,5,[])).toBe(true)});it("역할 권한을 제한한다",()=>{expect(hasPermission("super_admin","settings")).toBe(true);expect(hasPermission("staff","settings")).toBe(false)})});

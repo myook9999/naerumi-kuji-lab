@@ -1,33 +1,31 @@
-# 내루미의 쿠지연구소
+# 쿠지병동 전용 사이트
 
-다지점 쿠지 운영 흐름을 보여주기 위한 Next.js 16 데모입니다. 관리자 대시보드, 정산, 쿠지판, 당첨·배송, 회원, 포인트 강화, 지점·상품·리포트·알림·설정 화면과 고객용 지점 페이지를 포함합니다.
+쿠지병동 한 지점만을 위한 Next.js 16 고객·관리자 사이트입니다. 공식 쿠지병동 로고와 코랄/크림/브라운 색상을 사용합니다.
 
-## 실행
+## 현재 제공 화면
+
+- 고객: 닉네임·아이디·비밀번호 가입 신청, 승인 대기, 실시간 쿠지판, 보유 포인트, 단계별 포인트 치료
+- 사장님: 병동 대시보드, 가입 승인/거절, 포인트 지급/차감, 치료 현황, 쿠지판 모니터와 고객 화면 공개/숨김
+- 단일 지점: 지점 선택, 홍대지점, 분점 관리 기능 없음
+
+## 안전한 시연 실행
 
 ```bash
 corepack pnpm install
 corepack pnpm dev
 ```
 
-- 관리자: http://localhost:3000/login
-- 고객 화면: http://localhost:3000/store/hongdae
-- 관리자 계정: `admin@naerumi.test / demo1234`
-- 지점 관리자: `manager@naerumi.test / demo1234`
-- 회원: `member@naerumi.test / demo1234`
+- 사이트: http://localhost:3000
+- 사장님: `owner / demo1234`
+- 승인 환자: `patient / demo1234`
+- 승인 대기: `pending / demo1234`
 
-데모 변경 내용은 브라우저 `localStorage`에 저장됩니다. 설정의 “데모 초기화”로 최초 상태로 되돌릴 수 있습니다.
+기본값은 `NEXT_PUBLIC_DATA_MODE=mock`이므로 Firebase에 접속하거나 데이터를 변경하지 않습니다.
 
 ## 검증
 
 ```bash
-corepack pnpm lint
-corepack pnpm typecheck
-corepack pnpm test
-corepack pnpm build
+corepack pnpm verify
 ```
 
-## 데모와 납품판의 경계
-
-현재는 제안·시연용입니다. 화면상 등록·수정·정산·배송·강화 흐름은 동작하지만 영구 저장은 브라우저 기준이며 실제 결제, 택배사, Firebase 운영 프로젝트와 연결되지 않습니다. 납품 전 필수 작업은 [납품 전환 체크리스트](docs/PRODUCTION_CHECKLIST.md)를 확인하세요.
-
-연동 API 예시는 `/api/integrations/health`, `/sync`, `/events`이며 POST 요청은 `timestamp.body`의 HMAC-SHA256 서명을 요구합니다. 데모 강화 API는 서버 확률, 중복 키, 일일 제한을 적용하지만 서버 재시작 시 메모리 상태가 초기화됩니다.
+실 Firebase 연결 전에는 [쿠지병동 Firebase 연결 안전 지침](docs/KUJI_HOSPITAL_FIREBASE_SAFETY.md)을 반드시 확인하세요. 규칙 파일은 검토용 조각이며 자동 배포되지 않습니다.

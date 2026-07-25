@@ -1,0 +1,1 @@
+import {HospitalTreatment} from "@/components/admin/hospital-treatment"; export default function Page(){return <HospitalTreatment/>}

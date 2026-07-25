@@ -1,1 +1,1 @@
-import {Settlements} from "@/components/admin/settlements";export default function Page(){return <Settlements/>}
+import {redirect} from "next/navigation"; export default function Page(){redirect("/admin/dashboard")}

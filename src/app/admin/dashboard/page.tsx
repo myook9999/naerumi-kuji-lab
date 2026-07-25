@@ -1,1 +1,1 @@
-import {Dashboard} from "@/components/admin/dashboard";export default function Page(){return <Dashboard/>}
+import {HospitalDashboard} from "@/components/admin/hospital-dashboard"; export default function Page(){return <HospitalDashboard/>}

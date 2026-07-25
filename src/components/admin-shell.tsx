@@ -1,4 +1,44 @@
 "use client";
-import Link from "next/link";import {usePathname,useRouter} from "next/navigation";import {Bell,BookOpen,Boxes,ChevronDown,ClipboardList,FlaskConical,Gift,HelpCircle,LayoutDashboard,Menu,MessageSquare,PackageSearch,PlugZap,Settings,Store,Users,WalletCards,X} from "lucide-react";import {useState} from "react";import {stores} from "@/lib/mock/data";import {useLab} from "@/components/providers";import {brand} from "@/config/brand";
-const nav=[["/admin/dashboard","연구소 대시보드",LayoutDashboard],["/admin/settlements","오늘의 정산",WalletCards],["/admin/kuji-boards","쿠지판 관찰실",PackageSearch],["/admin/winners","상위상 기록실",Gift],["/admin/members","회원·배송 관리",Users],["/admin/enhancement","포인트 강화실",FlaskConical],["/admin/stores","지점 연구소 관리",Store],["/admin/catalog","상품·쿠지 관리",Boxes],["/admin/reports","정산 리포트",ClipboardList],["/admin/notifications","알림·메시지",MessageSquare],["/admin/settings","연구소 설정",Settings]] as const;
-export function AdminShell({children}:{children:React.ReactNode}){const path=usePathname(),router=useRouter(),lab=useLab(),[mobile,setMobile]=useState(false);const allowed=lab.auth?.role==="staff"?nav.filter(x=>!["/admin/stores","/admin/settings"].includes(x[0])):nav;return <div className="admin-frame"><aside className={"sidebar "+(mobile?"open":"")}><button className="sidebar-close" onClick={()=>setMobile(false)} aria-label="메뉴 닫기"><X/></button><Link href="/admin/dashboard" className="lab-logo"><span className="logo-symbol"><FlaskConical/></span><span><b>내루미의<br/>쿠지연구소</b><small>{brand.englishName}</small></span></Link><p className="logo-sub">쿠지의 모든 순간을 연구하고 기록해요</p><nav>{allowed.map(([href,label,Icon])=><Link key={href} href={href} onClick={()=>setMobile(false)} className={path===href?"active":""}><Icon size={18}/><span>{label}</span>{href.includes("enhancement")&&<i>NEW</i>}</Link>)}</nav><div className="sidebar-promo"><BookOpen size={20}/><b>LAB PRO</b><p>더 정확한 다지점 운영 리포트가 필요하신가요?</p><button>자세히 보기</button></div><small className="copyright">{brand.copyright}</small></aside><div className="admin-main"><header className="topbar"><button className="mobile-menu" onClick={()=>setMobile(true)} aria-label="메뉴 열기"><Menu/></button><label className="store-select"><Store size={16}/><select value={lab.selectedStoreId} onChange={e=>lab.setSelectedStoreId(e.target.value)}>{stores.map(s=><option key={s.id} value={s.id}>{s.shortName}</option>)}</select><ChevronDown size={14}/></label><span className="sync-status"><i/>쿠지 프로그램 연동 정상</span><button className="outline-btn"><PlugZap size={15}/> POS 연동</button><div className="top-spacer"/><Link href="/admin/notifications" className="icon-link" aria-label="알림"><Bell size={19}/><b>{lab.notifications.filter(n=>!n.read).length}</b></Link><button className="icon-link" aria-label="도움말"><HelpCircle size={19}/></button><button className="profile" onClick={()=>{if(lab.auth){lab.logout();router.push("/login")}else router.push("/login")}}><span>내</span><div><b>{lab.auth?.name||"데모 관리자"}</b><small>{lab.auth?.role==="super_admin"?"슈퍼 관리자":"연구소장"}</small></div><ChevronDown size={14}/></button></header><main className="admin-content">{children}</main></div></div>}
+
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { Activity, ClipboardList, HeartPulse, LayoutDashboard, LogOut, Menu, MonitorDot, ShieldCheck, Users, X } from "lucide-react";
+import { useState } from "react";
+import { assets } from "@/config/brand";
+import { useHospital } from "@/components/hospital-provider";
+import { Card } from "@/components/ui";
+
+const nav = [
+  ["/admin/dashboard", "병동 대시보드", LayoutDashboard],
+  ["/admin/kuji-boards", "쿠지판 모니터", MonitorDot],
+  ["/admin/members", "환자 승인·포인트", Users],
+  ["/admin/treatment", "환자 치료 현황", HeartPulse],
+] as const;
+
+export function AdminShell({ children }: { children: React.ReactNode }) {
+  const path = usePathname();
+  const router = useRouter();
+  const hospital = useHospital();
+  const [mobile, setMobile] = useState(false);
+  if (!hospital.ready) return <main className="hospital-loading"><Activity/><p>관리자 병동을 준비하고 있어요...</p></main>;
+  if (!hospital.session || hospital.session.role !== "owner") return <main className="admin-access-denied"><Card><Image src={assets.logo} alt="쿠지병동" width={100} height={100}/><ShieldCheck/><h1>사장님 전용 병동입니다</h1><p>관리자 계정으로 로그인해야 환자 정보와 포인트를 관리할 수 있습니다.</p><Link className="hospital-primary-link" href="/login">사장님 로그인</Link></Card></main>;
+  async function logout() {
+    await hospital.logout();
+    router.push("/login");
+  }
+  return <div className="admin-frame hospital-admin-frame">
+    <aside className={`sidebar hospital-sidebar ${mobile ? "open" : ""}`}>
+      <button className="sidebar-close" onClick={() => setMobile(false)} aria-label="메뉴 닫기"><X/></button>
+      <Link href="/admin/dashboard" className="hospital-admin-logo"><Image src={assets.logo} alt="쿠지병동" width={76} height={76}/><span><b>쿠지병동</b><small>OWNER WARD</small></span></Link>
+      <p className="logo-sub">한 지점만 안전하게 관리하는 사장님 전용 병동</p>
+      <nav>{nav.map(([href, label, Icon]) => <Link key={href} href={href} onClick={() => setMobile(false)} className={path === href ? "active" : ""}><Icon/><span>{label}</span></Link>)}</nav>
+      <div className="hospital-safety-card"><ShieldCheck/><b>원본 보호 중</b><p>쿠지병동 공개 스냅샷만 읽습니다.</p><small>ownerApi 미사용 · 다른 지점 접근 없음</small></div>
+      <small className="copyright">© 2026 쿠지병동</small>
+    </aside>
+    <div className="admin-main">
+      <header className="topbar hospital-topbar"><button className="mobile-menu" onClick={() => setMobile(true)} aria-label="메뉴 열기"><Menu/></button><span className="single-store"><ClipboardList/> 쿠지병동 단일 지점</span><span className={`sync-status ${hospital.boardConnection === "error" ? "error" : ""}`}><i/>{hospital.boardConnection === "live" ? "Firebase 실시간 연동" : hospital.boardConnection === "demo" ? "시연 모드" : "연동 확인 중"}</span><div className="top-spacer"/><Link className="patient-preview" href="/patient">환자 화면 보기</Link><button className="owner-profile" onClick={logout}><span>쿠</span><div><b>쿠지병동 사장님</b><small>관리자 · 로그아웃</small></div><LogOut/></button></header>
+      <main className="admin-content">{children}</main>
+    </div>
+  </div>;
+}

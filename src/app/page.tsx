@@ -1,2 +1,1 @@
-import {redirect} from "next/navigation";
-export default function Home(){redirect("/login")}
+import {HospitalAuth} from "@/components/hospital-auth"; export default function Home(){return <HospitalAuth mode="login"/>}

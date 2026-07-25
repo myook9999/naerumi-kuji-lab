@@ -1,30 +1,11 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
-import {QueryClient,QueryClientProvider} from "@tanstack/react-query";
-import {createContext,useCallback,useContext,useEffect,useMemo,useState} from "react";
-import {Toaster,toast} from "sonner";
-import {boards as seedBoards,enhancementAttempts as seedAttempts,members as seedMembers,notifications as seedNotifications,settlements as seedSettlements,stores,winners as seedWinners} from "@/lib/mock/data";
-import {storagePrefix} from "@/config/brand";
-import type {EnhancementAttempt,KujiBoard,Member,Notification,Role,Settlement,Winner} from "@/types";
-type Auth={email:string;name:string;role:Role};
-type Ctx={auth:Auth|null;selectedStoreId:string;setSelectedStoreId:(id:string)=>void;boards:KujiBoard[];members:Member[];winners:Winner[];settlements:Settlement[];notifications:Notification[];points:number;level:number;streak:number;attempts:EnhancementAttempt[];claimedRewards:number[];demoLive:boolean;setDemoLive:(v:boolean)=>void;login:(e:string,p:string)=>Promise<Auth>;logout:()=>void;confirmSettlement:(id:string,memo:string,tags:string[])=>void;markAllRead:()=>void;updateShipment:(id:string,status:Winner["shipmentStatus"],tracking?:string)=>void;saveMember:(m:Member)=>void;addBoard:(b:KujiBoard)=>void;deleteBoard:(id:string)=>void;enhance:()=>Promise<{success:boolean;before:number;after:number}>;redeem:(l:number,r:number)=>void;resetDemo:()=>void};
-const LabContext=createContext<Ctx|null>(null),queryClient=new QueryClient(),stateKey=storagePrefix+"state",authKey=storagePrefix+"auth";
-export function Providers({children}:{children:React.ReactNode}){
-const [auth,setAuth]=useState<Auth|null>(null),[selectedStoreId,setStore]=useState("store-1"),[boards,setBoards]=useState(seedBoards),[members,setMembers]=useState(seedMembers),[winners,setWinners]=useState(seedWinners),[settlements,setSettlements]=useState(seedSettlements),[notifications,setNotifications]=useState(seedNotifications),[points,setPoints]=useState(1248950),[level,setLevel]=useState(3),[streak,setStreak]=useState(2),[attempts,setAttempts]=useState(seedAttempts),[claimedRewards,setClaimed]=useState<number[]>([]),[demoLive,setDemoLive]=useState(false),[ready,setReady]=useState(false);
-useEffect(()=>{try{const raw=localStorage.getItem(stateKey),a=localStorage.getItem(authKey);if(raw){const x=JSON.parse(raw);setStore(x.selectedStoreId||"store-1");setBoards(x.boards||seedBoards);setMembers(x.members||seedMembers);setWinners(x.winners||seedWinners);setSettlements(x.settlements||seedSettlements);setNotifications(x.notifications||seedNotifications);setPoints(x.points??1248950);setLevel(x.level??3);setStreak(x.streak??2);setAttempts(x.attempts||seedAttempts);setClaimed(x.claimedRewards||[])}if(a)setAuth(JSON.parse(a))}catch{}setReady(true)},[]);
-useEffect(()=>{if(ready)localStorage.setItem(stateKey,JSON.stringify({selectedStoreId,boards,members,winners,settlements,notifications,points,level,streak,attempts,claimedRewards}))},[ready,selectedStoreId,boards,members,winners,settlements,notifications,points,level,streak,attempts,claimedRewards]);
-useEffect(()=>{if(!demoLive)return;const id=setInterval(()=>setPoints(p=>p+10),5000);return()=>clearInterval(id)},[demoLive]);
-const setSelectedStoreId=(id:string)=>{setStore(id);toast.success((stores.find(s=>s.id===id)?.shortName||"지점")+"으로 전환했습니다.")};
-const login=async(email:string,password:string)=>{await new Promise(r=>setTimeout(r,350));if(password!=="demo1234")throw new Error("이메일 또는 비밀번호를 확인해 주세요.");const role:Role=email.startsWith("admin")?"super_admin":email.startsWith("manager")?"store_admin":email.startsWith("member")?"member":"staff";const v={email,name:role==="member"?"별밤연구원":role==="super_admin"?"내루미 관리자":"홍대 연구소장",role};setAuth(v);localStorage.setItem(authKey,JSON.stringify(v));return v};
-const logout=()=>{setAuth(null);localStorage.removeItem(authKey);toast.success("로그아웃했습니다.")};
-const confirmSettlement=(id:string,memo:string,tags:string[])=>{setSettlements(xs=>xs.map(x=>x.id===id?{...x,confirmed:true,memo,tags,items:x.items.map(i=>({...i,status:"확정"}))}:x));toast.success("정산을 확정하고 감사 로그를 기록했습니다.")};
-const markAllRead=()=>{setNotifications(xs=>xs.map(x=>({...x,read:true})));toast.success("모든 알림을 읽음 처리했습니다.")};
-const updateShipment=(id:string,status:Winner["shipmentStatus"],tracking?:string)=>{setWinners(xs=>xs.map(x=>x.id===id?{...x,shipmentStatus:status,trackingNumber:tracking||x.trackingNumber}:x));toast.success("배송 정보를 저장했습니다.")};
-const saveMember=(m:Member)=>{setMembers(xs=>xs.map(x=>x.id===m.id?m:x));toast.success("회원 정보를 저장했습니다.")};
-const addBoard=(b:KujiBoard)=>{setBoards(xs=>[b,...xs]);toast.success("새 쿠지판을 등록했습니다.")};const deleteBoard=(id:string)=>{setBoards(xs=>xs.filter(x=>x.id!==id));toast.success("쿠지판을 삭제했습니다.")};
-const enhance=useCallback(async()=>{const before=level,r=await fetch("/api/enhancement/attempt",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({idempotencyKey:crypto.randomUUID(),userId:"member-1",storeId:selectedStoreId,level,points})}),x=await r.json();if(!r.ok)throw new Error(x.error||"강화 요청을 처리하지 못했습니다.");setPoints(x.points);setLevel(x.levelAfter);setStreak(x.streak);setAttempts(v=>[x.attempt,...v]);return{success:x.success,before,after:x.levelAfter}},[level,points,selectedStoreId]);
-const redeem=(l:number,r:number)=>{if(level<l||claimedRewards.includes(l))return;setPoints(p=>p+r);setClaimed(x=>[...x,l]);toast.success("연구 보상 "+r.toLocaleString()+"P를 받았습니다.")};
-const resetDemo=()=>{localStorage.removeItem(stateKey);setBoards(seedBoards);setMembers(seedMembers);setWinners(seedWinners);setSettlements(seedSettlements);setNotifications(seedNotifications);setPoints(1248950);setLevel(3);setStreak(2);setAttempts(seedAttempts);setClaimed([]);setStore("store-1");toast.success("데모 데이터를 초기화했습니다.")};
-const value=useMemo(()=>({auth,selectedStoreId,setSelectedStoreId,boards,members,winners,settlements,notifications,points,level,streak,attempts,claimedRewards,demoLive,setDemoLive,login,logout,confirmSettlement,markAllRead,updateShipment,saveMember,addBoard,deleteBoard,enhance,redeem,resetDemo}),[auth,selectedStoreId,boards,members,winners,settlements,notifications,points,level,streak,attempts,claimedRewards,demoLive,enhance]);
-return <QueryClientProvider client={queryClient}><LabContext.Provider value={value}>{children}</LabContext.Provider><Toaster richColors position="top-right"/></QueryClientProvider>}
-export function useLab(){const v=useContext(LabContext);if(!v)throw new Error("useLab must be used inside Providers");return v}
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "sonner";
+import { HospitalProvider } from "@/components/hospital-provider";
+
+const queryClient = new QueryClient();
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return <QueryClientProvider client={queryClient}><HospitalProvider>{children}</HospitalProvider><Toaster richColors position="top-right"/></QueryClientProvider>;
+}

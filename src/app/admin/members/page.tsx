@@ -1,1 +1,1 @@
-import {Members} from "@/components/admin/members";export default function Page(){return <Members/>}
+import {HospitalMembers} from "@/components/admin/hospital-members"; export default function Page(){return <HospitalMembers/>}

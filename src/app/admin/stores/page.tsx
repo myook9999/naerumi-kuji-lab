@@ -1,1 +1,1 @@
-import {Stores} from "@/components/admin/operations";export default function Page(){return <Stores/>}
+import {redirect} from "next/navigation"; export default function Page(){redirect("/admin/dashboard")}

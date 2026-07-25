@@ -1,1 +1,1 @@
-import {Notifications} from "@/components/admin/operations";export default function Page(){return <Notifications/>}
+import {redirect} from "next/navigation"; export default function Page(){redirect("/admin/dashboard")}

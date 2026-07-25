@@ -1,1 +1,1 @@
-import {AuthScreen} from "@/components/auth-screen";export default function Page(){return <AuthScreen mode="login"/>}
+import {HospitalAuth} from "@/components/hospital-auth"; export default function Page(){return <HospitalAuth mode="login"/>}

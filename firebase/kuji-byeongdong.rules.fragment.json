@@ -1,0 +1,21 @@
+{
+  "_comment": "기존 공용 database.rules.json에 병합할 검토용 조각입니다. 이 파일을 단독 배포하지 마세요.",
+  "rules": {
+    "branches": {
+      "kuji-byeongdong": {
+        "boards": {
+          "current": {
+            ".read": "auth != null && (root.child('web/kuji-byeongdong/admins').child(auth.uid).child('active').val() === true || (root.child('web/kuji-byeongdong/settings/boardVisible').val() !== false && root.child('web/kuji-byeongdong/members').child(auth.uid).child('status').val() === 'approved'))",
+            ".write": false
+          }
+        }
+      }
+    },
+    "web": {
+      "kuji-byeongdong": {
+        ".read": false,
+        ".write": false
+      }
+    }
+  }
+}

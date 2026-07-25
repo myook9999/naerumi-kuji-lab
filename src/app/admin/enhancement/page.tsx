@@ -1,1 +1,1 @@
-import {Enhancement} from "@/components/admin/enhancement";export default function Page(){return <Enhancement/>}
+import {redirect} from "next/navigation"; export default function Page(){redirect("/admin/treatment")}

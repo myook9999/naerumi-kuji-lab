@@ -1,0 +1,1 @@
+import {HospitalStorefront} from "@/components/hospital-storefront"; export default function Page(){return <HospitalStorefront/>}
