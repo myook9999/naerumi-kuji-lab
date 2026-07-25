@@ -1,0 +1,1 @@
+import {Notifications} from "@/components/admin/operations";export default function Page(){return <Notifications/>}
