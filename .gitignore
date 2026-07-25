@@ -19,6 +19,9 @@
 
 # production
 /build
+/.open-next/
+/.wrangler/
+/.wrangler-dry-run/
 
 # misc
 .DS_Store
