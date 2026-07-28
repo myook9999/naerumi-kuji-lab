@@ -45,4 +45,19 @@ describe("쿠지병동 Firebase 안전 경계", () => {
     expect(result.boards[0].customerResults?.[0]).toMatchObject({ nickname: "환자", randomGoodsCount: 2 });
     expect(result.boards[0].customerResults?.[0]).not.toHaveProperty("account");
   });
+
+  it("빈 값이나 중복된 판 ID를 고유한 선택 ID로 보정한다", () => {
+    const result = sanitizeBoardCollection({
+      boards: [
+        { id: "", sourceIndex: 0, boardName: "첫 판", totalCards: 10, openedCount: 1 },
+        { id: "", sourceIndex: 0, boardName: "둘째 판", totalCards: 10, openedCount: 2 },
+        { id: "same", sourceIndex: 2, boardName: "셋째 판", totalCards: 10, openedCount: 3 },
+        { id: "same", sourceIndex: 3, boardName: "넷째 판", totalCards: 10, openedCount: 4 },
+      ],
+    });
+    const ids = result.boards.map((board) => board.id);
+
+    expect(ids.every(Boolean)).toBe(true);
+    expect(new Set(ids).size).toBe(result.boards.length);
+  });
 });

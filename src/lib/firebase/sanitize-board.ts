@@ -73,7 +73,20 @@ export function sanitizeBoardSnapshot(value: unknown): PublicBoardSnapshot {
 }
 
 export function sanitizeBoardCollection(value: unknown): PublicBoardCollectionPreview {
-  const source = record(value); const boards = Array.isArray(source.boards) ? source.boards.slice(0, 20).map(sanitizeBoardSnapshot) : [];
+  const source = record(value);
+  const usedBoardIds = new Set<string>();
+  const boards = Array.isArray(source.boards) ? source.boards.slice(0, 20).map((value, index) => {
+    const board = sanitizeBoardSnapshot(value);
+    const baseId = board.id?.trim() || `board-${board.sourceIndex ?? index}`;
+    let uniqueId = baseId;
+    let duplicate = 1;
+    while (usedBoardIds.has(uniqueId)) {
+      uniqueId = `${baseId}-${index}-${duplicate}`;
+      duplicate += 1;
+    }
+    usedBoardIds.add(uniqueId);
+    return { ...board, id: uniqueId };
+  }) : [];
   const currentIndex = Math.min(Math.max(0, safeNumber(source.currentIndex, 1000)), Math.max(0, boards.length - 1));
   const featuredIndex = Math.min(Math.max(0, safeNumber(source.featuredIndex, 1000)), Math.max(0, boards.length - 1));
   return { sourceUpdatedAt: safeText(source.sourceUpdatedAt), currentIndex, featuredIndex, boards };
