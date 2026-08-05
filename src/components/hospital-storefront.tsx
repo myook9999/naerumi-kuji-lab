@@ -10,6 +10,7 @@ import { MAX_TREATMENT_STAGE, treatmentStages } from "@/config/hospital";
 import { useHospital } from "@/components/hospital-provider";
 import { HospitalAuth } from "@/components/hospital-auth";
 import { PatientFulfillment } from "@/components/patient-fulfillment";
+import { PatientPointStore } from "@/components/patient-point-store";
 import { BoardImageGallery } from "@/components/board-image-gallery";
 import { Badge, Button, Card, Progress } from "@/components/ui";
 
@@ -55,8 +56,10 @@ export function HospitalStorefront() {
   }
 
   return <main className="patient-app">
-    <header className="patient-header"><Link href="/patient" className="hospital-wordmark"><Image src={assets.logo} alt="쿠지병동" width={58} height={58}/><span><b>쿠지병동</b><small>PATIENT WARD</small></span></Link><nav><a href="#chart">쿠지판</a><a href="#my-prizes">내 상위상·배송</a><a href="#treatment">치료실</a><span><b>{session.name}</b> 환자님</span><button onClick={() => hospital.logout()} aria-label="로그아웃"><LogOut/></button></nav></header>
+    <header className="patient-header"><Link href="/patient" className="hospital-wordmark"><Image src={assets.logo} alt="쿠지병동" width={58} height={58}/><span><b>쿠지병동</b><small>PATIENT WARD</small></span></Link><nav><a href="#point-store">포인트 상점</a><a href="#chart">쿠지판</a><a href="#my-prizes">내 상위상·배송</a><a href="#treatment">치료실</a><span><b>{session.name}</b> 환자님</span><button onClick={() => hospital.logout()} aria-label="로그아웃"><LogOut/></button></nav></header>
     <section className="patient-hero"><div><Badge tone="green"><CircleCheck/> 입원 승인 완료</Badge><p>환자번호 {session.uid.slice(0, 8).toUpperCase()}</p><h1>{session.name} 환자님,<br/>오늘의 쿠지 상태를 확인해 볼까요?</h1><div className="patient-vitals"><span><small>보유 포인트</small><b>{session.points.toLocaleString()}P</b></span><span><small>현재 치료 단계</small><b>{stage.name}</b></span><span><small>쿠지 잔여권</small><b>{hospital.board.remainingCards}장</b></span></div></div><Image src={assets.logo} alt="쿠지병동" width={280} height={280}/></section>
+
+    <PatientPointStore/>
 
     <section id="chart" className="patient-section"><div className="hospital-section-title"><span>LIVE KUJI CHART</span><h2>실시간 쿠지 차트</h2><p>쿠지병동 프로그램에서 필요한 공개 정보만 읽어옵니다.</p></div>
       {hospital.boardVisible && <div className="patient-all-boards">{hospital.boards.map((item, index) => <button type="button" className={item.id === hospital.board.id ? "active" : ""} onClick={() => hospital.selectBoard(item.id || "")} key={item.id || `${item.boardName}-${index}`}><span>#{index + 1} {item.isProgramCurrent ? "프로그램 선택" : item.remainingCards ? "진행 가능" : "종료"}</span><b>{item.boardName}</b><strong>{item.remainingCards.toLocaleString()}<small>장 남음</small></strong><Progress value={item.totalCards ? item.openedCount / item.totalCards * 100 : 0} color={item.remainingCards ? "#C95F5C" : "#aaa"}/><footer>오픈 {item.openedCount.toLocaleString()} / {item.totalCards.toLocaleString()}</footer></button>)}</div>}

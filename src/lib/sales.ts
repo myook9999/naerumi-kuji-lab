@@ -1,4 +1,4 @@
-import type { PublicBoardSnapshot, PublicSalesDailyBucket, PublicSalesMonthlyBucket } from "@/types/hospital";
+import type { PublicBoardSnapshot, PublicSalesDailyBucket, PublicSalesMonthlyBucket, PublicSalesWeeklyBucket } from "@/types/hospital";
 
 export function parseWon(value: string) { const amount = Number(value.replace(/[^0-9]/g, "")); return Number.isFinite(amount) ? amount : 0; }
 export function calculateBoardSettlement(board: PublicBoardSnapshot, feeRate = 3.5) {
@@ -25,7 +25,21 @@ export function aggregateMonthlySales(boards: PublicBoardSnapshot[]): PublicSale
   boards.forEach((board) => board.sales?.monthly.forEach((item) => { const current = totals.get(item.month) ?? { month: item.month, ticketCount: 0, grossSales: 0 }; current.ticketCount += item.ticketCount; current.grossSales += item.grossSales; totals.set(item.month, current); }));
   return [...totals.values()].sort((a, b) => b.month.localeCompare(a.month));
 }
-export function kstDateKey(date = new Date()) {
+export function aggregateWeeklySales(boards: PublicBoardSnapshot[]): PublicSalesWeeklyBucket[] {
+  const totals = new Map<string, PublicSalesWeeklyBucket>();
+  aggregateDailySales(boards).forEach((item) => {
+    const date = new Date(`${item.date}T00:00:00Z`);
+    if (Number.isNaN(date.getTime())) return;
+    const daysSinceMonday = (date.getUTCDay() + 6) % 7;
+    date.setUTCDate(date.getUTCDate() - daysSinceMonday);
+    const weekStart = date.toISOString().slice(0, 10);
+    const current = totals.get(weekStart) ?? { weekStart, ticketCount: 0, grossSales: 0 };
+    current.ticketCount += item.ticketCount;
+    current.grossSales += item.grossSales;
+    totals.set(weekStart, current);
+  });
+  return [...totals.values()].sort((a, b) => b.weekStart.localeCompare(a.weekStart));
+}export function kstDateKey(date = new Date()) {
   const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(date);
   const pick = (type: Intl.DateTimeFormatPartTypes) => parts.find((item) => item.type === type)?.value ?? "";
   return `${pick("year")}-${pick("month")}-${pick("day")}`;

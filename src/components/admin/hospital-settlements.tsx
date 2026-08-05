@@ -2,9 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { CalendarDays, CircleDollarSign, FileClock, Receipt, ShieldCheck, Ticket, TrendingUp, WalletCards } from "lucide-react";
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useHospital } from "@/components/hospital-provider";
 import { Badge, Card, Progress } from "@/components/ui";
-import { aggregateDailySales, aggregateMonthlySales, calculateBoardSettlement, calculatePortfolioSettlement, kstDateKey, won } from "@/lib/sales";
+import { aggregateDailySales, aggregateMonthlySales, aggregateWeeklySales, calculateBoardSettlement, calculatePortfolioSettlement, kstDateKey, won } from "@/lib/sales";
 import { KpiCard, PageHeader, SectionTitle } from "./common";
 
 export function HospitalSettlements() {
@@ -14,11 +15,14 @@ export function HospitalSettlements() {
   const portfolio = useMemo(() => calculatePortfolioSettlement(hospital.boards), [hospital.boards]);
   const selectedSales = calculateBoardSettlement(selected);
   const daily = useMemo(() => aggregateDailySales(hospital.boards), [hospital.boards]);
+  const weekly = useMemo(() => aggregateWeeklySales(hospital.boards), [hospital.boards]);
   const monthly = useMemo(() => aggregateMonthlySales(hospital.boards), [hospital.boards]);
   const todayKey = kstDateKey(); const monthKey = todayKey.slice(0, 7);
   const today = daily.find((item) => item.date === todayKey) ?? { ticketCount: 0, grossSales: 0 };
   const thisMonth = monthly.find((item) => item.month === monthKey) ?? { ticketCount: 0, grossSales: 0 };
   const maxDaily = Math.max(1, ...daily.slice(0, 14).map((item) => item.grossSales));
+  const weeklyChart = weekly.slice(0, 8).reverse().map((item) => ({ ...item, label: `${item.weekStart.slice(5).replace("-", ".")} 주` }));
+  const monthlyChart = monthly.slice(0, 12).reverse().map((item) => ({ ...item, label: item.month.replace("-", ".") }));
   const sourceLabel = hospital.boardConnection === "live" ? "Firebase 실시간" : hospital.boardConnection === "preview" ? "실제 캐시 미리보기" : "연결 확인 중";
 
   return <>
@@ -45,6 +49,10 @@ export function HospitalSettlements() {
       <div className="summary-list"><div><span>누적 예상 매출</span><b>{won(selectedSales.grossSales)}</b></div><div><span>예상 결제 수수료</span><b className="danger">-{won(selectedSales.estimatedFee)}</b></div><div><span>판매 티켓</span><b>{selectedSales.soldTickets.toLocaleString()}장</b></div><div><span>날짜 미분류</span><b>{(selected.sales?.unclassifiedTickets ?? selected.openedCount).toLocaleString()}장</b></div></div><div className="summary-total"><span>현재 예상 정산액</span><strong>{won(selectedSales.estimatedNet)}</strong></div>
     </Card></div>
 
+    <div className="sales-chart-grid">
+      <Card className="sales-chart-card"><SectionTitle title="주별 매출 추이" sub="최근 8주 · 월요일 시작"/><div className="sales-chart"><ResponsiveContainer width="100%" height="100%"><BarChart data={weeklyChart} margin={{ top: 8, right: 8, left: 4, bottom: 0 }}><CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee7e2"/><XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fill: "#817873", fontSize: 11 }}/><YAxis axisLine={false} tickLine={false} width={52} tick={{ fill: "#817873", fontSize: 11 }} tickFormatter={(value) => `${Math.round(Number(value) / 10000)}만`}/><Tooltip cursor={{ fill: "#fff3ef" }} formatter={(value) => [won(Number(value)), "매출"]} labelFormatter={(label) => `${label} 시작`}/><Bar dataKey="grossSales" name="매출" fill="#C95F5C" radius={[8, 8, 2, 2]} maxBarSize={42}/></BarChart></ResponsiveContainer>{!weeklyChart.length && <div className="sales-chart-empty"><CalendarDays/><p>날짜별 판매가 쌓이면 주별 매출을 표시합니다.</p></div>}</div></Card>
+      <Card className="sales-chart-card"><SectionTitle title="월별 매출 추이" sub="최근 12개월 · 월 누적"/><div className="sales-chart"><ResponsiveContainer width="100%" height="100%"><AreaChart data={monthlyChart} margin={{ top: 8, right: 8, left: 4, bottom: 0 }}><defs><linearGradient id="monthlySalesFill" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#6E86C7" stopOpacity={0.34}/><stop offset="95%" stopColor="#6E86C7" stopOpacity={0.03}/></linearGradient></defs><CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee7e2"/><XAxis dataKey="label" axisLine={false} tickLine={false} tick={{ fill: "#817873", fontSize: 11 }}/><YAxis axisLine={false} tickLine={false} width={52} tick={{ fill: "#817873", fontSize: 11 }} tickFormatter={(value) => `${Math.round(Number(value) / 10000)}만`}/><Tooltip formatter={(value) => [won(Number(value)), "매출"]}/><Area type="monotone" dataKey="grossSales" name="매출" stroke="#6E86C7" strokeWidth={3} fill="url(#monthlySalesFill)" activeDot={{ r: 5 }}/></AreaChart></ResponsiveContainer>{!monthlyChart.length && <div className="sales-chart-empty"><WalletCards/><p>날짜별 판매가 쌓이면 월별 매출을 표시합니다.</p></div>}</div></Card>
+    </div>
     <div className="sales-period-grid"><Card className="sales-period-card"><SectionTitle title="일일 매출" sub="최근 14일 · 한국시간 기준"/><div className="sales-bars">{daily.slice(0, 14).map((item) => <div key={item.date}><span className="sales-bar-label"><b>{item.date.slice(5)}</b><small>{item.ticketCount}장</small></span><span className="sales-bar-track"><i style={{ width: `${Math.max(2, item.grossSales / maxDaily * 100)}%` }}/></span><strong>{won(item.grossSales)}</strong></div>)}{!daily.length && <div className="sales-empty-period"><CalendarDays/><p>1.0.7 업데이트 이후 새 판매분부터 일일 매출이 표시됩니다.</p></div>}</div></Card>
       <Card className="sales-period-card"><SectionTitle title="월 매출" sub="최근 12개월 · 새 추적 판매분"/><div className="monthly-sales-list">{monthly.slice(0, 12).map((item) => <div key={item.month}><span><b>{item.month}</b><small>{item.ticketCount.toLocaleString()}장 판매</small></span><strong>{won(item.grossSales)}</strong></div>)}{!monthly.length && <div className="sales-empty-period"><WalletCards/><p>새 판매 데이터가 쌓이면 월별 합계가 자동으로 표시됩니다.</p></div>}</div></Card>
     </div>

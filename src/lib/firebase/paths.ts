@@ -9,6 +9,8 @@ export const firebasePaths = {
   treatmentLogs: `${hospital.webRootPath}/treatmentLogs`,
   winnings: `${hospital.webRootPath}/winnings`,
   shippingAddresses: `${hospital.webRootPath}/shippingAddresses`,
+  storeProducts: `${hospital.webRootPath}/storeProducts`,
+  storePurchases: `${hospital.webRootPath}/storePurchases`,
   treatmentSettings: `${hospital.webRootPath}/settings/treatment`,
   settings: `${hospital.webRootPath}/settings`,
 } as const;

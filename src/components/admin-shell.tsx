@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Activity, ClipboardList, HeartPulse, LayoutDashboard, LogOut, Menu, MonitorDot, PackageCheck, ShieldCheck, Users, WalletCards, X } from "lucide-react";
+import { Activity, ClipboardList, HeartPulse, LayoutDashboard, LogOut, Menu, MonitorDot, PackageCheck, ShieldCheck, ShoppingBag, Users, WalletCards, X } from "lucide-react";
 import { useState } from "react";
 import { assets } from "@/config/brand";
 import { useHospital } from "@/components/hospital-provider";
@@ -14,6 +14,7 @@ const nav = [
   ["/admin/settlements", "매출·정산 확인", WalletCards],
   ["/admin/kuji-boards", "쿠지판 모니터", MonitorDot],
   ["/admin/fulfillment", "상위상·배송 관리", PackageCheck],
+  ["/admin/catalog", "포인트 상점", ShoppingBag],
   ["/admin/members", "환자 승인·포인트", Users],
   ["/admin/treatment", "강화 치료 관리", HeartPulse],
 ] as const;

@@ -8,8 +8,9 @@ import { MAX_TREATMENT_STAGE } from "@/config/hospital";
 import previewBoardsData from "@/data/kuji-byeongdong-boards-preview.json";
 import { getFirebaseClient, isFirebaseMode, isLiveBoardMode, subscribeHospitalBoards } from "@/lib/firebase/client";
 import { resolveTreatmentOutcome } from "@/lib/treatment";
+import { checkPointPurchase, validateStoreProductDraft } from "@/lib/store";
 import { defaultTreatmentSettings, sanitizeTreatmentSettings, validateTreatmentRates } from "@/lib/treatment-settings";
-import type { CustomerWinning, HospitalMember, HospitalSession, PublicBoardCollectionPreview, PublicBoardSnapshot, ShippingAddress, ShippingStatus, TreatmentLog, TreatmentRate, TreatmentResult, TreatmentSettings } from "@/types/hospital";
+import type { CustomerWinning, HospitalMember, HospitalSession, PointPurchase, PublicBoardCollectionPreview, PublicBoardSnapshot, ShippingAddress, ShippingStatus, StoreProduct, StoreProductDraft, TreatmentLog, TreatmentRate, TreatmentResult, TreatmentSettings } from "@/types/hospital";
 
 type BoardConnection = "demo" | "preview" | "connecting" | "live" | "error";
 
@@ -27,6 +28,8 @@ interface HospitalContextValue {
   treatmentLogs: TreatmentLog[];
   winnings: CustomerWinning[];
   shippingAddresses: Record<string, ShippingAddress>;
+  storeProducts: StoreProduct[];
+  pointPurchases: PointPurchase[];
   login: (loginId: string, password: string) => Promise<HospitalSession>;
   signup: (input: { loginId: string; password: string; nickname: string }) => Promise<void>;
   logout: () => Promise<void>;
@@ -41,6 +44,9 @@ interface HospitalContextValue {
   refreshFulfillment: () => Promise<void>;
   saveShippingAddress: (address: Omit<ShippingAddress, "updatedAt">) => Promise<void>;
   updateShipment: (id: string, shippingStatus: ShippingStatus, carrier: string, trackingNumber: string) => Promise<void>;
+  refreshStore: () => Promise<void>;
+  saveStoreProduct: (input: StoreProductDraft) => Promise<StoreProduct>;
+  purchaseProduct: (productId: string, quantity: number) => Promise<PointPurchase>;
 }
 
 const previewCollection = previewBoardsData as PublicBoardCollectionPreview;
@@ -68,6 +74,12 @@ const demoTreatmentLogs: TreatmentLog[] = [
   { id: "treatment-demo-2", uid: "patient-1", loginId: "patient", name: "별밤 환자", outcome: "failed", success: false, destroyed: false, beforeStage: 6, afterStage: 6, cost: 5000, points: 28000, probability: 58, destroyProbability: 8, createdAt: "2026-07-24T05:30:00.000Z" },
 ];
 
+const demoStoreProducts: StoreProduct[] = [
+  { id: "store-demo-1", name: "쿠지 티켓 보관 홀더", description: "소중한 쿠지 티켓을 깔끔하게 보관하는 병동 전용 홀더입니다.", imageUrl: "/assets/kuji-hospital/ticket.png", pricePoints: 3500, stock: 12, active: true, createdAt: "2026-07-25T07:00:00.000Z", updatedAt: "2026-07-25T07:00:00.000Z" },
+  { id: "store-demo-2", name: "쿠지병동 미니 파우치", description: "작은 굿즈와 소지품을 담기 좋은 쿠지병동 포인트 상품입니다.", imageUrl: "/assets/kuji-hospital/logo.png", pricePoints: 6000, stock: 8, active: true, createdAt: "2026-07-25T07:10:00.000Z", updatedAt: "2026-07-25T07:10:00.000Z" },
+  { id: "store-demo-3", name: "내루미 행운 스티커팩", description: "내루미 캐릭터를 담은 포인트 교환 전용 스티커 세트입니다.", imageUrl: "/assets/naerumi/naerumi-main.png", pricePoints: 1800, stock: 30, active: true, createdAt: "2026-07-25T07:20:00.000Z", updatedAt: "2026-07-25T07:20:00.000Z" },
+];
+const demoPointPurchases: PointPurchase[] = [];
 const HospitalContext = createContext<HospitalContextValue | null>(null);
 const sessionKey = "kuji-hospital:session";
 const membersKey = "kuji-hospital:members";
@@ -77,6 +89,8 @@ const treatmentSettingsKey = "kuji-hospital:treatment-settings";
 const treatmentLogsKey = "kuji-hospital:treatment-logs";
 const winningsKey = "kuji-hospital:winnings";
 const shippingAddressesKey = "kuji-hospital:shipping-addresses";
+const storeProductsKey = "kuji-hospital:store-products";
+const pointPurchasesKey = "kuji-hospital:point-purchases";
 const defaultDemoCredentials: Record<string, string> = { owner: "demo1234", patient: "demo1234", pending: "demo1234", recovery: "demo1234" };
 
 function loginIdToEmail(loginId: string) {
@@ -113,6 +127,8 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
   const [treatmentLogs, setTreatmentLogs] = useState<TreatmentLog[]>(demoTreatmentLogs);
   const [winnings, setWinnings] = useState<CustomerWinning[]>(demoWinnings);
   const [shippingAddresses, setShippingAddresses] = useState<Record<string, ShippingAddress>>(demoShippingAddresses);
+  const [storeProducts, setStoreProducts] = useState<StoreProduct[]>(demoStoreProducts);
+  const [pointPurchases, setPointPurchases] = useState<PointPurchase[]>(demoPointPurchases);
 
   useEffect(() => {
     if (!firebaseMode) {
@@ -125,6 +141,8 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
         const savedTreatmentLogs = localStorage.getItem(treatmentLogsKey);
         const savedWinnings = localStorage.getItem(winningsKey);
         const savedShippingAddresses = localStorage.getItem(shippingAddressesKey);
+        const savedStoreProducts = localStorage.getItem(storeProductsKey);
+        const savedPointPurchases = localStorage.getItem(pointPurchasesKey);
         if (savedSession) setSession(JSON.parse(savedSession));
         if (savedMembers) setMembers(JSON.parse(savedMembers));
         if (savedVisible) setVisible(savedVisible === "true");
@@ -133,6 +151,8 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
         if (savedTreatmentLogs) setTreatmentLogs(JSON.parse(savedTreatmentLogs));
         if (savedWinnings) setWinnings(JSON.parse(savedWinnings));
         if (savedShippingAddresses) setShippingAddresses(JSON.parse(savedShippingAddresses));
+        if (savedStoreProducts) setStoreProducts(JSON.parse(savedStoreProducts));
+        if (savedPointPurchases) setPointPurchases(JSON.parse(savedPointPurchases));
       } catch { /* 손상된 데모 저장값은 초기값으로 복구한다. */ }
       setReady(true);
       return;
@@ -175,10 +195,12 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem(treatmentLogsKey, JSON.stringify(treatmentLogs.slice(0, 100)));
       localStorage.setItem(winningsKey, JSON.stringify(winnings));
       localStorage.setItem(shippingAddressesKey, JSON.stringify(shippingAddresses));
+      localStorage.setItem(storeProductsKey, JSON.stringify(storeProducts));
+      localStorage.setItem(pointPurchasesKey, JSON.stringify(pointPurchases.slice(0, 200)));
       if (session) localStorage.setItem(sessionKey, JSON.stringify(session));
       else localStorage.removeItem(sessionKey);
     }
-  }, [firebaseMode, members, boardVisible, session, demoCredentials, treatmentSettings, treatmentLogs, winnings, shippingAddresses]);
+  }, [firebaseMode, members, boardVisible, session, demoCredentials, treatmentSettings, treatmentLogs, winnings, shippingAddresses, storeProducts, pointPurchases]);
 
   useEffect(() => {
     if (!liveBoardMode || !session || session.status !== "approved") return;
@@ -370,7 +392,60 @@ export function HospitalProvider({ children }: { children: React.ReactNode }) {
     toast.success("배송 상태를 반영했습니다.");
   }, [firebaseMode, session, winnings]);
 
-  const value = useMemo<HospitalContextValue>(() => ({ session, ready, firebaseMode, board, boards, boardConnection, boardError, boardVisible, members, treatmentSettings, treatmentLogs, winnings, shippingAddresses, login, signup, logout, refreshMembers, changeMemberStatus, changePoints, setBoardVisible, selectBoard, refreshTreatmentAdmin, saveTreatmentSettings, runTreatment, refreshFulfillment, saveShippingAddress, updateShipment }), [session, ready, firebaseMode, board, boards, boardConnection, boardError, boardVisible, members, treatmentSettings, treatmentLogs, winnings, shippingAddresses, login, signup, logout, refreshMembers, changeMemberStatus, changePoints, setBoardVisible, selectBoard, refreshTreatmentAdmin, saveTreatmentSettings, runTreatment, refreshFulfillment, saveShippingAddress, updateShipment]);
+  const refreshStore = useCallback(async () => {
+    if (!firebaseMode || !session) return;
+    const endpoint = session.role === "owner" ? "/api/admin/store" : "/api/store";
+    const result = await apiRequest<{ products: StoreProduct[]; purchases: PointPurchase[] }>(endpoint);
+    setStoreProducts(result.products);
+    setPointPurchases(result.purchases);
+  }, [firebaseMode, session]);
+
+  const saveStoreProduct = useCallback(async (input: StoreProductDraft) => {
+    if (!session || session.role !== "owner") throw new Error("사장님만 상품을 등록하거나 수정할 수 있습니다.");
+    const fields = validateStoreProductDraft(input);
+    let product: StoreProduct;
+    if (firebaseMode) {
+      const result = await apiRequest<{ product: StoreProduct }>("/api/admin/store", { method: input.id ? "PATCH" : "POST", body: JSON.stringify({ ...fields, id: input.id }) });
+      product = result.product;
+    } else {
+      const current = input.id ? storeProducts.find((item) => item.id === input.id) : undefined;
+      if (input.id && !current) throw new Error("수정할 상품을 찾을 수 없습니다.");
+      const now = new Date().toISOString();
+      product = { id: current?.id || crypto.randomUUID(), ...fields, createdAt: current?.createdAt || now, updatedAt: now };
+    }
+    setStoreProducts((current) => current.some((item) => item.id === product.id) ? current.map((item) => item.id === product.id ? product : item) : [product, ...current]);
+    toast.success(input.id ? "상품 정보를 수정했습니다." : "포인트 상점에 상품을 등록했습니다.");
+    return product;
+  }, [firebaseMode, session, storeProducts]);
+
+  const purchaseProduct = useCallback(async (productId: string, quantity: number) => {
+    if (!session || session.role !== "patient" || session.status !== "approved") throw new Error("승인된 고객만 포인트 상품을 구매할 수 있습니다.");
+    const currentProduct = storeProducts.find((item) => item.id === productId);
+    if (!currentProduct) throw new Error("구매할 상품을 찾을 수 없습니다.");
+    const check = checkPointPurchase(currentProduct, quantity, session.points);
+    if (!check.ok) throw new Error(check.error);
+    let purchase: PointPurchase;
+    let product: StoreProduct;
+    let updatedSession: HospitalSession;
+    if (firebaseMode) {
+      const result = await apiRequest<{ purchase: PointPurchase; product: StoreProduct; session: HospitalSession }>("/api/store/purchase", { method: "POST", body: JSON.stringify({ productId, quantity, requestId: crypto.randomUUID() }) });
+      purchase = result.purchase;
+      product = result.product;
+      updatedSession = result.session;
+    } else {
+      const now = new Date().toISOString();
+      updatedSession = { ...session, points: check.remainingPoints };
+      product = { ...currentProduct, stock: currentProduct.stock - quantity, updatedAt: now };
+      purchase = { id: crypto.randomUUID(), requestId: crypto.randomUUID(), uid: session.uid, loginId: session.loginId, customerName: session.name, productId, productName: currentProduct.name, imageUrl: currentProduct.imageUrl, quantity, unitPrice: currentProduct.pricePoints, totalPoints: check.totalPoints, createdAt: now };
+    }
+    setSession(updatedSession);
+    setMembers((current) => current.map((member) => member.uid === updatedSession.uid ? { ...member, ...updatedSession } : member));
+    setStoreProducts((current) => current.map((item) => item.id === product.id ? product : item));
+    setPointPurchases((current) => current.some((item) => item.id === purchase.id) ? current : [purchase, ...current].slice(0, 200));
+    toast.success(`${purchase.productName} ${purchase.quantity}개를 ${purchase.totalPoints.toLocaleString()}P에 구매했습니다.`);
+    return purchase;
+  }, [firebaseMode, session, storeProducts]);
+  const value = useMemo<HospitalContextValue>(() => ({ session, ready, firebaseMode, board, boards, boardConnection, boardError, boardVisible, members, treatmentSettings, treatmentLogs, winnings, shippingAddresses, storeProducts, pointPurchases, login, signup, logout, refreshMembers, changeMemberStatus, changePoints, setBoardVisible, selectBoard, refreshTreatmentAdmin, saveTreatmentSettings, runTreatment, refreshFulfillment, saveShippingAddress, updateShipment, refreshStore, saveStoreProduct, purchaseProduct }), [session, ready, firebaseMode, board, boards, boardConnection, boardError, boardVisible, members, treatmentSettings, treatmentLogs, winnings, shippingAddresses, storeProducts, pointPurchases, login, signup, logout, refreshMembers, changeMemberStatus, changePoints, setBoardVisible, selectBoard, refreshTreatmentAdmin, saveTreatmentSettings, runTreatment, refreshFulfillment, saveShippingAddress, updateShipment, refreshStore, saveStoreProduct, purchaseProduct]);
   return <HospitalContext.Provider value={value}>{children}</HospitalContext.Provider>;
 }
 

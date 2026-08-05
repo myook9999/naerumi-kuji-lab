@@ -45,8 +45,7 @@ export function HospitalAuth({ mode }: { mode: "login" | "signup" | "reset" }) {
   return <main className="auth-page hospital-auth-page">
     <section className="auth-brand hospital-auth-brand">
       <Link href="/" className="hospital-wordmark"><Image src={assets.logo} alt="쿠지병동" width={84} height={84}/><span><b>{brand.name}</b><small>{brand.englishName}</small></span></Link>
-      <div><span>KUJI CARE CENTER</span><h1>{mode === "login" ? <>쿠지로 지친 마음,<br/>오늘도 치료해 드려요</> : mode === "signup" ? <>쿠지병동의 새로운<br/>환자로 접수할게요</> : <>다시 병동에 들어오실 수<br/>있도록 도와드릴게요</>}</h1><p>{brand.slogan}</p><div className="auth-points"><span><ShieldCheck/>사장님 승인 회원제</span><span><ClipboardCheck/>안전한 포인트 진료 기록</span></div></div>
-      <Image className="hospital-auth-ticket" src={assets.ticket} width={330} height={330} alt="쿠지병동 티켓" priority/>
+      <div className="hospital-auth-copy"><Image className="hospital-auth-ticket" src={assets.ticket} width={330} height={330} alt="쿠지병동 티켓" priority/><span>KUJI CARE CENTER</span><h1>{mode === "login" ? <>쿠지로 지친 마음,<br/>오늘도 치료해 드려요</> : mode === "signup" ? <>쿠지병동의 새로운<br/>환자로 접수할게요</> : <>다시 병동에 들어오실 수<br/>있도록 도와드릴게요</>}</h1><p>{brand.slogan}</p><div className="auth-points"><span><ShieldCheck/>사장님 승인 회원제</span><span><ClipboardCheck/>안전한 포인트 진료 기록</span></div></div>
     </section>
     <section className="auth-form-wrap"><form className="auth-form" onSubmit={submit}>
       <span className="auth-icon hospital-auth-icon">{mode === "login" ? <KeyRound/> : mode === "signup" ? <UserPlus/> : <HeartPulse/>}</span><h2>{title}</h2><p>{mode === "signup" ? "닉네임·아이디·비밀번호를 직접 정한 뒤 사장님 승인을 기다려 주세요." : "쿠지병동 전용 아이디로 안전하게 입장하세요."}</p>

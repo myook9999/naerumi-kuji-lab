@@ -56,9 +56,11 @@ test("사장님은 실제 캐시 기반 매출·정산과 강화 확률·로그�
   await page.getByLabel("비밀번호", { exact: true }).fill("demo1234");
   await page.getByRole("button", { name: "병동 입장하기" }).click();
   await page.goto("/admin/settlements");
-  await expect(page.getByRole("heading", { name: "매출·정산 확인" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "매출·정산 센터" })).toBeVisible();
   await expect(page.getByText("612,000원", { exact: true }).first()).toBeVisible();
-  await expect(page.getByText("실제 캐시 미리보기 기준", { exact: true })).toBeVisible();
+  await expect(page.getByText("실제 캐시 미리보기", { exact: true }).first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "주별 매출 추이" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "월별 매출 추이" })).toBeVisible();
   await page.goto("/admin/treatment");
   await expect(page.getByRole("heading", { name: "단계별 강화 확률 설정" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "최근 강화 로그" })).toBeVisible();
@@ -74,8 +76,8 @@ test("사장님은 프로그램 전체 쿠지판 10개를 확인한다", async (
   await page.goto("/admin/kuji-boards");
   await expect(page.getByRole("heading", { name: "전체 쿠지판 현황" })).toBeVisible();
   await expect(page.locator(".all-board-grid > button")).toHaveCount(10);
-  await expect(page.getByText("#2 1000장 2탄", { exact: true })).toBeVisible();
-  await expect(page.getByText("#9 스텔스 바쿠고 한찾", { exact: true })).toBeVisible();
+  await expect(page.locator(".all-board-grid").getByText("#2 1000장 2탄", { exact: true })).toBeVisible();
+  await expect(page.locator(".all-board-grid").getByText("#9 스텔스 바쿠고 한찾", { exact: true })).toBeVisible();
   await page.locator(".all-board-grid > button").nth(0).click();
   await expect(page.getByRole("heading", { name: "600장 고객별 뽑기 결과" })).toBeVisible();
   await expect(page.locator(".admin-board-results .board-result-list > article")).toHaveCount(7);
@@ -131,4 +133,40 @@ test("강화 확률 변경 공지가 고객 화면에 표시된다", async ({ pa
   await expect(page.getByText("7강 성공률을 59%로 변경했습니다.")).toBeVisible();
   await expect(page.getByText("실제 캐시 미리보기", { exact: true })).toBeVisible();
   await expect(page.getByText("59%", { exact: true }).first()).toBeVisible();
+});
+test("사장님만 이미지 링크 상품을 등록한다", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("로그인 아이디").fill("owner");
+  await page.getByLabel("비밀번호", { exact: true }).fill("demo1234");
+  await page.getByRole("button", { name: "병동 입장하기" }).click();
+  await page.goto("/admin/catalog");
+  await expect(page.getByRole("heading", { name: "포인트 상점 관리" })).toBeVisible();
+  await page.getByRole("button", { name: /새 상품 등록/ }).click();
+  const dialog = page.getByRole("dialog", { name: "새 포인트 상품 등록" });
+  await dialog.getByLabel("상품명").fill("테스트 행운 키링");
+  await dialog.getByLabel("상품 설명").fill("포인트로 구매하는 테스트 상품입니다.");
+  await dialog.getByLabel("이미지 링크").fill("https://example.com/point-item.jpg");
+  await dialog.getByLabel("가격(P)").fill("2400");
+  await dialog.getByLabel("재고").fill("5");
+  await dialog.getByRole("button", { name: "상품 등록" }).click();
+  const product = page.locator(".admin-point-product-grid > article").filter({ hasText: "테스트 행운 키링" });
+  await expect(product).toBeVisible();
+  await expect(product.getByText("2,400P", { exact: true })).toBeVisible();
+  await expect(product.getByText("재고 5개", { exact: true })).toBeVisible();
+});
+
+test("승인 고객은 보유 포인트로 상품을 구매한다", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("로그인 아이디").fill("patient");
+  await page.getByLabel("비밀번호", { exact: true }).fill("demo1234");
+  await page.getByRole("button", { name: "병동 입장하기" }).click();
+  await expect(page.getByRole("heading", { name: "쿠지병동 포인트 상점" })).toBeVisible();
+  const product = page.locator(".patient-point-product").filter({ hasText: "쿠지 티켓 보관 홀더" });
+  await product.getByRole("button", { name: "포인트로 구매" }).click();
+  const dialog = page.getByRole("dialog", { name: "포인트 상품 구매 확인" });
+  await expect(dialog.getByText("3,500P", { exact: true }).first()).toBeVisible();
+  await dialog.getByRole("button", { name: "3,500P로 구매 확정" }).click();
+  await expect(page.locator(".point-store-balance").getByText("24,500P", { exact: true })).toBeVisible();
+  await expect(page.locator(".patient-purchase-history article").filter({ hasText: "쿠지 티켓 보관 홀더" })).toBeVisible();
+  await expect(product.getByText("재고 11개", { exact: true })).toBeVisible();
 });

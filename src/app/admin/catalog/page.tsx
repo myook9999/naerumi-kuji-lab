@@ -1,1 +1,1 @@
-import {redirect} from "next/navigation"; export default function Page(){redirect("/admin/dashboard")}
+import { HospitalStore } from "@/components/admin/hospital-store"; export default function Page(){return <HospitalStore/>}

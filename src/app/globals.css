@@ -81,3 +81,134 @@ body{background:var(--hospital-cream);color:var(--ink);font-family:var(--font-ge
 .board-image-gallery-wrap{display:grid;gap:18px}.board-image-gallery-title{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.board-image-gallery-title h2{margin:0;color:#292321;font-size:20px}.board-image-gallery-title p{margin:6px 0 0;color:#77706b;font-size:13px}.board-image-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.board-image-gallery>button{display:grid;grid-template-columns:78px minmax(0,1fr);grid-template-rows:auto auto;gap:8px 12px;text-align:left;border:1px solid #ece7e2;background:#fff;border-radius:18px;padding:10px;cursor:pointer;transition:.2s ease;min-width:0}.board-image-gallery>button:hover,.board-image-gallery>button.active{border-color:#c95f5c;box-shadow:0 8px 24px rgba(116,57,53,.12);transform:translateY(-1px)}.safe-prize-image{position:relative;display:grid;place-items:center;overflow:hidden;background:linear-gradient(145deg,#f6eeea,#fff);border:1px solid #eee5df;border-radius:13px;width:78px;height:78px;grid-row:1/3}.safe-prize-image img{display:block;width:100%;height:100%;object-fit:cover}.safe-prize-image svg{width:24px;color:#b7aaa3}.safe-prize-image .image-fallback{display:none;position:absolute;inset:0;place-items:center;background:#f8f3ef}.safe-prize-image.failed img{display:none}.safe-prize-image.failed .image-fallback{display:grid}.safe-prize-image.compact{width:28px;height:28px;border-radius:8px;grid-row:auto}.safe-prize-image.compact svg{width:14px}.gallery-board-info{min-width:0;display:grid;align-content:center;gap:7px}.gallery-board-info>span{display:flex;align-items:center;gap:6px;min-width:0}.gallery-board-info b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#352e2a;font-size:14px}.gallery-board-info small{color:#817873;font-size:12px}.gallery-thumbs{display:flex;align-items:center;gap:4px}.admin-prize-grid article>.safe-prize-image{width:100%;height:118px;grid-row:auto}.patient-board-images{margin-top:18px}
 .sales-kpis-primary .kpi-card:first-child{border:1px solid rgba(201,95,92,.28);background:linear-gradient(145deg,#fff,#fff7f5)}.sales-board-table-card{margin-bottom:18px}.sales-board-table{display:grid;gap:6px;overflow-x:auto}.sales-table-head,.sales-board-table>button{display:grid;grid-template-columns:minmax(220px,1.6fr) minmax(80px,.55fr) minmax(130px,.8fr) minmax(130px,.8fr) minmax(130px,.8fr);align-items:center;gap:14px;min-width:820px;padding:12px 15px}.sales-table-head{color:#918985;font-size:12px;font-weight:700;border-bottom:1px solid #eee8e4}.sales-board-table>button{border:1px solid transparent;border-radius:13px;background:#faf8f6;text-align:left;color:#514a46;cursor:pointer}.sales-board-table>button:hover,.sales-board-table>button.active{border-color:#dca5a2;background:#fff7f6}.sales-board-table>button>strong{color:#2f2926;font-size:15px}.sales-board-name{display:flex;align-items:center;gap:7px;min-width:0}.sales-board-name small{color:#a49b96}.sales-board-name b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sales-row-progress{display:grid;grid-template-columns:1fr 38px;align-items:center;gap:8px}.sales-row-progress small{text-align:right}.sales-period-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:18px;margin:18px 0}.sales-bars,.monthly-sales-list{display:grid;gap:10px}.sales-bars>div{display:grid;grid-template-columns:75px 1fr 105px;align-items:center;gap:12px}.sales-bar-label{display:grid}.sales-bar-label b{font-size:13px}.sales-bar-label small{font-size:11px;color:#918985}.sales-bar-track{height:10px;background:#f0ebe7;border-radius:999px;overflow:hidden}.sales-bar-track i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#c95f5c,#eb9a78)}.sales-bars>div>strong{text-align:right;font-size:13px}.monthly-sales-list>div{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #eee8e4}.monthly-sales-list>div>span{display:grid;gap:3px}.monthly-sales-list small{color:#918985;font-size:12px}.monthly-sales-list strong{color:#c95f5c}.sales-empty-period{display:flex!important;grid-template-columns:auto 1fr!important;align-items:center!important;justify-content:center;gap:10px!important;min-height:130px;color:#8b817b;text-align:left}.sales-empty-period svg{width:28px}.sales-empty-period p{margin:0;max-width:300px;line-height:1.55}.sales-detail-layout{align-items:stretch}
 @media(max-width:1050px){.board-image-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.sales-period-grid{grid-template-columns:1fr}}@media(max-width:680px){.board-image-gallery{grid-template-columns:1fr}.sales-table-head,.sales-board-table>button{grid-template-columns:minmax(190px,1.5fr) 75px 120px 120px 120px}.sales-bars>div{grid-template-columns:62px 1fr 90px}.safe-prize-image{width:68px;height:68px}.board-image-gallery>button{grid-template-columns:68px minmax(0,1fr)}}
+
+/* Login ticket placement and sales trend charts */
+.hospital-auth-brand .hospital-auth-copy{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;max-width:560px}.hospital-auth-copy .hospital-auth-ticket{position:static;width:250px!important;height:250px!important;margin:0 0 8px -28px;flex:0 0 auto}.sales-chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:18px 0}.sales-chart-card{min-width:0}.sales-chart{position:relative;width:100%;height:270px;margin-top:8px}.sales-chart-empty{position:absolute;inset:26px 12px 18px 58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1px dashed #e2d7d1;border-radius:14px;background:rgba(255,251,248,.9);color:#8b817b;text-align:center}.sales-chart-empty svg{width:28px}.sales-chart-empty p{margin:0;font-size:12px;line-height:1.5}.sales-chart .recharts-default-tooltip{border:1px solid #eadfda!important;border-radius:12px!important;box-shadow:0 10px 28px rgba(90,65,57,.12)!important}.sales-chart .recharts-tooltip-label{color:#4b423e;font-weight:800}
+@media(max-width:1050px){.sales-chart-grid{grid-template-columns:1fr}.hospital-auth-copy .hospital-auth-ticket{width:180px!important;height:180px!important;margin:0 0 4px -18px}}
+@media(max-width:520px){.hospital-auth-brand .hospital-auth-copy{display:flex;position:absolute;right:0;bottom:-22px;width:155px;max-width:none}.hospital-auth-copy .hospital-auth-ticket{display:block!important;width:155px!important;height:155px!important;margin:0;opacity:.78!important}.hospital-auth-copy>span,.hospital-auth-copy>h1,.hospital-auth-copy>p,.hospital-auth-copy>.auth-points{display:none}.sales-chart{height:235px}.sales-chart-card{padding-left:10px;padding-right:10px}}
+/* Point store */
+.point-store-kpis>div{border-color:#eaded8}.admin-point-store-card,.point-purchase-admin-card{margin-bottom:18px}.admin-point-product-grid,.patient-point-product-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.admin-point-product-grid>article,.patient-point-product{overflow:hidden;padding:0!important;border:1px solid var(--line);border-radius:17px;background:#fff}.point-product-image{position:relative;display:grid;place-items:center;width:100%;height:220px;overflow:hidden;background:linear-gradient(145deg,#fff7f2,#f2e7e1);color:#bba9a0}.point-product-image img{display:block;width:100%;height:100%;object-fit:cover}.point-product-image>svg{width:42px;height:42px}.point-product-image-fallback{display:none;position:absolute;inset:0;place-items:center;background:linear-gradient(145deg,#fff7f2,#f2e7e1)}.point-product-image-fallback svg{width:38px;color:#bba9a0}.point-product-image.failed img{display:none}.point-product-image.failed .point-product-image-fallback{display:grid}.point-product-image.compact{width:42px;height:42px;min-width:42px;border-radius:10px}.point-product-image.compact svg{width:18px}.admin-point-product-body,.patient-point-product>div{display:grid;gap:10px;padding:17px}.admin-point-product-body>span{display:flex;align-items:center;justify-content:space-between}.admin-point-product-body h3,.patient-point-product h3{margin:0;font-size:16px}.admin-point-product-body p,.patient-point-product p{margin:0;min-height:42px;color:var(--muted);font-size:11px;line-height:1.6}.admin-point-product-body>strong,.patient-point-product strong{font-size:22px;color:var(--hospital-primary)}.admin-point-product-body>.lab-button,.patient-point-product .lab-button{width:100%;margin-top:2px}.point-store-empty{grid-column:1/-1;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:28px;color:var(--muted);text-align:center}.point-store-empty>svg{width:38px;color:#bf8a7d}.point-store-empty b,.point-store-empty p{margin:0}.point-store-empty.compact{min-height:130px}.point-product-form{display:grid;gap:14px}.point-product-form label{display:grid;gap:6px;font-size:11px;font-weight:800}.point-product-form input,.point-product-form textarea{width:100%;min-width:0}.point-product-form textarea{min-height:90px;resize:vertical}.point-product-form label small{color:var(--muted);font-weight:400;line-height:1.5}.point-product-form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.point-product-active{display:flex!important;align-items:center;padding:12px;border:1px solid var(--line);border-radius:11px}.point-product-active input{width:auto}.point-product-active b,.point-product-active small{display:block}.point-image-preview{display:flex;align-items:center;gap:11px;padding:10px;background:#faf6f3;border-radius:12px;font-size:11px;color:var(--muted)}.point-image-preview .point-product-image{width:72px;height:72px;border-radius:10px}.point-purchase-table{display:grid;min-width:780px}.point-purchase-table>div{display:grid;grid-template-columns:1fr 1.4fr 70px 120px 160px;align-items:center;gap:12px;padding:11px;border-bottom:1px solid var(--line);font-size:11px}.point-purchase-head{color:var(--muted);font-weight:800}.point-purchase-table span b,.point-purchase-table span small{display:block}.point-purchase-table small{color:var(--muted);margin-top:3px}.point-purchase-table strong{color:var(--hospital-primary)}.point-purchase-product{display:flex;align-items:center;gap:8px}.point-purchase-admin-card{overflow-x:auto}.point-store-section{max-width:none!important;background:#fff8ef;padding-left:max(calc((100% - 1110px)/2),25px)!important;padding-right:max(calc((100% - 1110px)/2),25px)!important}.point-store-shell{max-width:1110px;margin:0 auto}.point-store-balance{display:flex;align-items:center;gap:13px;padding:17px 20px;margin-bottom:18px;border:1px solid #efdcd3;border-radius:15px;background:#fff}.point-store-balance>svg{width:44px;height:44px;padding:11px;border-radius:13px;background:#fff0eb;color:var(--hospital-primary)}.point-store-balance span{flex:1}.point-store-balance small,.point-store-balance b{display:block}.point-store-balance b{margin-top:4px;font-size:22px;color:var(--hospital-primary)}.point-store-balance p{margin:0;color:var(--muted);font-size:11px}.patient-point-product-grid{margin-bottom:18px}.patient-point-product>span{border-radius:0}.patient-point-product>div>span{display:flex}.patient-purchase-history{margin-top:18px}.patient-purchase-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.patient-purchase-title span{font-size:9px;letter-spacing:1.5px;color:var(--hospital-primary)}.patient-purchase-title h3{margin:5px 0 0}.patient-purchase-title>svg{width:38px;color:#bf776b}.patient-purchase-history article{display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.patient-purchase-history article b,.patient-purchase-history article small{display:block}.patient-purchase-history article small{margin-top:4px;color:var(--muted);font-size:9px}.patient-purchase-history article strong{color:var(--hospital-primary)}.patient-purchase-empty{margin:0;padding:24px;text-align:center;color:var(--muted)}.point-buy-modal{display:grid;gap:15px}.point-buy-modal>.point-product-image{height:220px;border-radius:13px}.point-buy-summary{text-align:center}.point-buy-summary h3{margin:10px 0 5px}.point-buy-summary p{margin:0;color:var(--muted);font-size:11px}.point-buy-summary>strong{display:block;margin-top:10px;font-size:24px;color:var(--hospital-primary)}.point-quantity{display:flex;align-items:center;justify-content:space-between;padding:12px;background:#faf5f2;border-radius:11px}.point-quantity>span{font-size:11px;font-weight:800}.point-quantity>div{display:flex;align-items:center;gap:12px}.point-quantity button{width:32px;height:32px;border:1px solid var(--line);border-radius:9px;background:#fff;display:grid;place-items:center}.point-quantity button svg{width:15px}.point-buy-total{display:grid;grid-template-columns:1fr 1fr;gap:8px}.point-buy-total>span{padding:12px;border:1px solid var(--line);border-radius:11px}.point-buy-total small,.point-buy-total b{display:block}.point-buy-total small{font-size:9px;color:var(--muted)}.point-buy-total b{margin-top:5px;color:var(--hospital-primary)}.point-buy-modal>.lab-button{width:100%;padding:13px}
+@media(max-width:1000px){.admin-point-product-grid,.patient-point-product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.point-product-image{height:200px}.point-store-balance p{display:none}}
+@media(max-width:650px){.admin-point-product-grid,.patient-point-product-grid{grid-template-columns:1fr}.point-store-section{padding-left:16px!important;padding-right:16px!important}.point-store-balance{padding:13px}.point-store-balance>svg{width:38px;height:38px}.point-store-balance b{font-size:18px}.point-product-form-row,.point-buy-total{grid-template-columns:1fr}.patient-header nav>a:not([href="#point-store"]){display:none}.patient-header nav{gap:10px}.point-product-image{height:210px}}
+@media(max-width:900px){.hospital-admin-frame .hospital-sidebar{transform:translateX(-100%);transition:.25s}.hospital-admin-frame .hospital-sidebar.open{transform:none;box-shadow:20px 0 50px #17112655}.hospital-admin-frame .admin-main{margin-left:0;width:100%}.hospital-admin-frame .mobile-menu{display:flex}}
+/* Mobile-only hospital layout polish */
+@media(max-width:680px){
+  .hospital-admin-frame{width:100%;max-width:100vw;overflow-x:clip}
+  .hospital-admin-frame .admin-main,.hospital-admin-frame .admin-content{min-width:0;width:100%;max-width:100%}
+  .hospital-admin-frame .admin-content{padding:14px 12px 30px}
+  .hospital-topbar{height:60px;padding:0 12px;gap:8px}
+  .hospital-topbar .mobile-menu{width:40px;height:40px;justify-content:center;padding:0;flex:0 0 auto}
+  .hospital-topbar .single-store{min-width:0;max-width:calc(100vw - 148px);padding:8px 9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hospital-topbar .owner-profile{flex:0 0 auto;padding:0}
+  .hospital-topbar .owner-profile>span{width:34px;height:34px}
+  .hospital-admin-frame .page-header{display:block;margin-bottom:16px}
+  .hospital-admin-frame .page-header p{line-height:1.55}
+  .hospital-admin-frame .page-header .header-actions{display:flex;width:100%;margin-top:12px;gap:8px;flex-wrap:wrap}
+  .hospital-admin-frame .page-header .header-actions>*{flex:0 1 auto}
+  .hospital-admin-frame .page-header .header-actions>.lab-button{width:100%;min-height:42px}
+  .hospital-admin-frame .kpi-grid,.hospital-admin-frame .kpi-grid.six,.hospital-admin-frame .kpi-strip,.hospital-admin-frame .board-fleet-kpis,.hospital-admin-frame .fulfillment-kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}
+  .hospital-admin-frame .kpi-card{display:grid;grid-template-columns:34px minmax(0,1fr);gap:9px;min-width:0;padding:12px}
+  .hospital-admin-frame .kpi-card .kpi-icon{width:34px;height:34px;min-width:34px;padding:7px}
+  .hospital-admin-frame .kpi-card>div:last-child{min-width:0}
+  .hospital-admin-frame .kpi-card span,.hospital-admin-frame .kpi-card b,.hospital-admin-frame .kpi-card strong,.hospital-admin-frame .kpi-card small{overflow-wrap:anywhere}
+  .hospital-admin-frame .lab-card{min-width:0;padding:16px}
+  .hospital-admin-frame .sales-board-table-card{max-width:100%;overflow:hidden}
+  .hospital-admin-frame .sales-board-table{display:grid;width:100%;max-width:100%;min-width:0;overflow:visible;padding:0}
+  .hospital-admin-frame .sales-table-head{display:none}
+  .hospital-admin-frame .sales-board-table>button{width:100%;min-width:0;grid-template-columns:minmax(0,.75fr) minmax(0,1.15fr) minmax(0,1.15fr);gap:9px;padding:13px}
+  .hospital-admin-frame .sales-board-table>button>.sales-board-name{grid-column:1/-1;padding-bottom:10px;border-bottom:1px solid #eee8e4}
+  .hospital-admin-frame .sales-board-table>button>span:nth-child(2),.hospital-admin-frame .sales-board-table>button>strong:nth-child(3),.hospital-admin-frame .sales-board-table>button>span:nth-child(4){display:grid;align-content:start;gap:3px;min-width:0;font-size:11px;overflow-wrap:anywhere}
+  .hospital-admin-frame .sales-board-table>button>span:nth-child(2)::before,.hospital-admin-frame .sales-board-table>button>strong:nth-child(3)::before,.hospital-admin-frame .sales-board-table>button>span:nth-child(4)::before{color:#9a918c;font-size:9px;font-weight:700}
+  .hospital-admin-frame .sales-board-table>button>span:nth-child(2)::before{content:"판매"}
+  .hospital-admin-frame .sales-board-table>button>strong:nth-child(3)::before{content:"누적 매출"}
+  .hospital-admin-frame .sales-board-table>button>span:nth-child(4)::before{content:"예상 정산"}
+  .hospital-admin-frame .sales-board-table>button>.sales-row-progress{grid-column:1/-1;grid-template-columns:minmax(0,1fr) 38px;margin-top:2px}
+  .hospital-admin-frame .table-wrap,.hospital-admin-frame .point-purchase-admin-card{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain}
+  .hospital-admin-frame .sales-chart-card,.hospital-admin-frame .sales-period-card{max-width:100%;overflow:hidden}
+  .hospital-admin-frame .sales-chart{height:225px}
+  .hospital-admin-frame .sales-chart-empty{inset:24px 8px 16px 48px;padding:10px}
+  .hospital-admin-frame .sales-bars>div{grid-template-columns:58px minmax(0,1fr) 86px;gap:8px}
+  .hospital-admin-frame .sales-bars>div>strong{font-size:11px}
+  .hospital-admin-frame .safety-boundary,.hospital-admin-frame .sales-source-card{flex-wrap:wrap;align-items:flex-start}
+  .hospital-admin-frame .safety-boundary>svg,.hospital-admin-frame .sales-source-card>svg{flex:0 0 auto}
+  .hospital-admin-frame .safety-boundary>.badge{margin-left:30px}
+  .overlay:not(.drawer-overlay){place-items:end center;padding:10px}
+  .overlay:not(.drawer-overlay) .modal{width:100%;max-height:calc(100dvh - 20px);padding:18px;border-radius:18px}
+  .overlay:not(.drawer-overlay) input,.overlay:not(.drawer-overlay) select,.overlay:not(.drawer-overlay) textarea{font-size:16px}
+  .modal-actions{display:grid;grid-template-columns:1fr 1fr}
+  .modal-actions>*{width:100%;min-height:42px}
+  .patient-app{width:100%;max-width:100vw;overflow-x:clip}
+  .patient-header{height:64px;padding:0 12px;gap:8px}
+  .patient-header .hospital-wordmark{gap:7px;min-width:0}
+  .patient-header .hospital-wordmark img{width:46px;height:46px;border-radius:13px}
+  .patient-header .hospital-wordmark b{font-size:15px}
+  .patient-header .hospital-wordmark small{font-size:7px;letter-spacing:1.2px}
+  .patient-header nav{gap:8px;min-width:0}
+  .patient-header nav span{display:none}
+  .patient-header nav>a[href="#point-store"]{display:inline-flex;align-items:center;min-height:38px;padding:0 10px;border:1px solid #efdcd3;border-radius:10px;background:#fff8ef;color:var(--hospital-primary);font-size:10px;font-weight:800;white-space:nowrap}
+  .patient-header nav button{width:38px;height:38px;flex:0 0 auto}
+  .patient-hero{min-height:auto;padding:34px 16px 28px}
+  .patient-hero h1{font-size:27px;line-height:1.35;margin:10px 0 22px}
+  .patient-hero>img{width:165px;height:165px;margin-top:8px}
+  .patient-vitals{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .patient-vitals>span,.patient-vitals>span:last-child{grid-column:auto;min-width:0;padding:10px 5px}
+  .patient-vitals b{font-size:13px;overflow-wrap:anywhere}
+  .patient-section,.point-store-section{padding-top:48px!important;padding-bottom:48px!important}
+  .hospital-section-title{margin-bottom:22px}
+  .hospital-section-title h2{font-size:23px;line-height:1.35}
+  .hospital-section-title p{font-size:11px;line-height:1.6}
+  .patient-board-card{min-width:0}
+  .board-visual{min-height:210px}
+  .board-chart-content{min-width:0;padding:18px}
+  .chart-numbers{align-items:flex-end;gap:10px;margin:24px 0 10px}
+  .chart-numbers strong{font-size:36px}
+  .chart-numbers span{text-align:right}
+  .patient-all-boards{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .patient-all-boards>button{min-width:0;padding:11px}
+  .prize-prescriptions{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .prize-prescriptions article{min-width:0;padding:13px}
+  .board-image-gallery-title{display:block}
+  .board-image-gallery-title p{line-height:1.55}
+  .treatment-machine{padding:18px!important}
+  .treatment-orb{width:185px;height:185px}
+  .treatment-metrics{grid-template-columns:1fr 1fr}
+  .treatment-notice{flex-wrap:wrap;padding:13px}
+  .treatment-risk{align-items:flex-start;text-align:left;line-height:1.5}
+  .patient-point-product,.patient-address-card,.patient-board-results,.patient-board-images{min-width:0}
+  .point-store-balance{min-width:0}
+  .point-store-balance span{min-width:0}
+  .point-buy-modal>.point-product-image{height:190px}
+  .hospital-public-footer{padding:24px 16px;line-height:1.55}
+  .hospital-auth-page{overflow-x:clip}
+  .hospital-auth-page .auth-form-wrap{padding-left:16px;padding-right:16px}
+  .hospital-auth-page .auth-form input{font-size:16px}
+  .hospital-auth-page .auth-form footer{gap:8px;flex-wrap:wrap;line-height:1.5}
+}
+@media(max-width:420px){
+  .hospital-admin-frame .admin-content{padding-left:10px;padding-right:10px}
+  .hospital-admin-frame .kpi-card{grid-template-columns:30px minmax(0,1fr);gap:7px;padding:10px}
+  .hospital-admin-frame .kpi-card .kpi-icon{width:30px;height:30px;min-width:30px;padding:6px}
+  .hospital-admin-frame .kpi-card b,.hospital-admin-frame .kpi-card strong{font-size:14px}
+  .hospital-admin-frame .section-title{gap:8px}
+  .hospital-admin-frame .section-title h2{line-height:1.35}
+  .hospital-auth-brand{min-height:170px;padding:18px}
+  .hospital-auth-copy .hospital-auth-ticket{width:140px!important;height:140px!important}
+  .hospital-auth-page .auth-form-wrap{padding-top:26px}
+  .hospital-auth-page .auth-form h2{font-size:22px;line-height:1.3}
+  .patient-header{padding-left:10px;padding-right:10px}
+  .patient-header .hospital-wordmark img{width:42px;height:42px}
+  .patient-header .hospital-wordmark small{display:none}
+  .patient-header nav>a[href="#point-store"]{padding:0 8px}
+  .patient-hero{padding-left:12px;padding-right:12px}
+  .patient-hero h1{font-size:25px}
+  .patient-vitals small{font-size:8px}
+  .patient-section,.point-store-section{padding-left:12px!important;padding-right:12px!important}
+  .patient-point-product-grid{gap:12px}
+  .patient-point-product .point-product-image{height:190px}
+  .board-result-title{display:block}
+  .board-result-title>.badge{margin-top:10px}
+  .patient-purchase-history article{grid-template-columns:42px minmax(0,1fr)}
+  .patient-purchase-history article>strong{grid-column:2}
+  .my-winning-list article{grid-template-columns:auto minmax(0,1fr)}
+  .my-winning-list article>.badge{grid-column:2;justify-self:start}
+}

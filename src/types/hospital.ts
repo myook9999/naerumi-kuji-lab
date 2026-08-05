@@ -39,6 +39,12 @@ export interface PublicSalesMonthlyBucket {
   grossSales: number;
 }
 
+export interface PublicSalesWeeklyBucket {
+  weekStart: string;
+  ticketCount: number;
+  grossSales: number;
+}
+
 export interface PublicBoardSales {
   unitPrice: number;
   ticketCount: number;
@@ -82,6 +88,34 @@ export interface PublicBoardCollectionPreview {
   boards: PublicBoardSnapshot[];
 }
 
+export interface StoreProduct {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+  pricePoints: number;
+  stock: number;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type StoreProductDraft = Pick<StoreProduct, "name" | "description" | "imageUrl" | "pricePoints" | "stock" | "active"> & { id?: string };
+
+export interface PointPurchase {
+  id: string;
+  requestId: string;
+  uid: string;
+  loginId: string;
+  customerName: string;
+  productId: string;
+  productName: string;
+  imageUrl: string;
+  quantity: number;
+  unitPrice: number;
+  totalPoints: number;
+  createdAt: string;
+}
 export type ShippingStatus = "address_required" | "preparing" | "shipped" | "delivered";
 
 export interface ShippingAddress {
